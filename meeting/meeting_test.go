@@ -3,38 +3,60 @@ package meeting_test
 import (
 	"encoding/json"
 	"testing"
+	"time"
 
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
+	"github.com/WeisswurstSystems/WWM-BB/product"
 )
 
 const meetingJSON = `{
+  "place": "somewhere over the rainbow",
+  "creator": "fabiwilms@gmail.com",
+  "buyer": "fabiwilms@gmail.com",
   "date": "0001-01-01T00:00:00Z",
   "orders": [
     {
       "customer": "peter-mueller@github.com",
+      "payed": false,
       "items": [
         {
-          "name": "Weisswurst",
+          "itemName": "Weisswurst",
           "amount": 3
         },
         {
-          "name": "Brezen",
+          "itemName": "Brezen",
           "amount": 2
         }
       ]
+    }
+  ],
+  "products": [
+    {
+      "name": "Weisswurst",
+      "price": 1.05
+    },
+    {
+      "name": "Brezen",
+      "price": 0.63
     }
   ]
 }`
 
 func TestMeetingEntity(t *testing.T) {
 	items := []meeting.OrderItem{{"Weisswurst", 3}, {"Brezen", 2}}
+	dateTime, _ := time.Parse("2014-09-12T11:45:26.371Z", "0001-01-01T00:00:00Z")
 	m := meeting.Meeting{
+		Place:   "somewhere over the rainbow",
+		Creator: "fabiwilms@gmail.com",
+		Buyer:   "fabiwilms@gmail.com",
+		Date:    dateTime,
 		Orders: []meeting.Order{
-			{"peter-mueller@github.com", items},
+			{"peter-mueller@github.com", false, items},
 		},
+		Products: []product.Product{{"Weisswurst", 1.05}, {"Brezen", .63}},
 	}
-	data, _ := json.MarshalIndent(m, "", "  ")
 
+	data, _ := json.MarshalIndent(m, "", "  ")
 	if string(data) != meetingJSON {
 		t.Error("JSON does not match!")
 	}
