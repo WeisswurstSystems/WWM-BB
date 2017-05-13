@@ -7,6 +7,7 @@ import (
 )
 
 type Meeting struct {
+	ID       string            `json:"id"`
 	Place    string            `json:"place"`
 	Creator  string            `json:"creator"`
 	Buyer    string            `json:"buyer"`
