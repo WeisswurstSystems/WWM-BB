@@ -1,0 +1,8 @@
+{
+  "name": "WWM-Backbone",
+  "description": "Das Backend für die Weisswurstverwaltung!",
+  "image": "heroku/go:1.6",
+  "mount_dir": "src/github.com/WeisswurstSystems/WWM-BB",
+  "website": "https://github.com/WeisswurstSystems/WWM-BB",
+  "repository": "https://github.com/WeisswurstSystems/WWM-BB"
+}
