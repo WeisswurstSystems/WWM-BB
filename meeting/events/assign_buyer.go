@@ -5,7 +5,8 @@ import (
 )
 
 type AssignBuyer struct {
-	Buyer string `json:"buyer"`
+	MeetingID string `json:"meetingID"`
+	Buyer     string `json:"buyer"`
 }
 
 func (event AssignBuyer) Execute() error {

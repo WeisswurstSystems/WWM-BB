@@ -5,7 +5,8 @@ import (
 )
 
 type Notify struct {
-	Message string `json:"message"`
+	MeetingID string `json:"meetingID"`
+	Message   string `json:"message"`
 }
 
 func (event Notify) Execute() error {

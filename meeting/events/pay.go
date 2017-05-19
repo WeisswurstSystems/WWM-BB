@@ -5,7 +5,8 @@ import (
 )
 
 type Pay struct {
-	UserID string `json:"userID"`
+	MeetingID string `json:"meetingID"`
+	UserID    string `json:"userID"`
 }
 
 func (event Pay) Execute() error {
