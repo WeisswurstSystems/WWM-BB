@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -83,11 +82,6 @@ func checkBasicAuth(r *http.Request) bool {
 	}
 	//TODO Datenbankabfrage
 	return u == "user" && p == "user"
-}
-
-func hasher(s string) []byte {
-	val := sha256.Sum256([]byte(s))
-	return val[:]
 }
 
 func main() {
