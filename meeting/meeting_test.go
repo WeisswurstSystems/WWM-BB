@@ -15,6 +15,8 @@ const meetingJSON = `{
   "creator": "fabiwilms@gmail.com",
   "buyer": "fabiwilms@gmail.com",
   "date": "0001-01-01T00:00:00Z",
+  "closeDate": "0001-01-01T00:00:00Z",
+  "closed": false,
   "orders": [
     {
       "customer": "peter-mueller@github.com",
@@ -47,11 +49,13 @@ func TestMeetingEntity(t *testing.T) {
 	items := []meeting.OrderItem{{"Weisswurst", 3}, {"Brezen", 2}}
 	dateTime, _ := time.Parse("2014-09-12T11:45:26.371Z", "0001-01-01T00:00:00Z")
 	m := meeting.Meeting{
-		ID:      "123459876",
-		Place:   "somewhere over the rainbow",
-		Creator: "fabiwilms@gmail.com",
-		Buyer:   "fabiwilms@gmail.com",
-		Date:    dateTime,
+		ID:        "123459876",
+		Place:     "somewhere over the rainbow",
+		Creator:   "fabiwilms@gmail.com",
+		Buyer:     "fabiwilms@gmail.com",
+		Date:      dateTime,
+		CloseDate: dateTime,
+		Closed:    false,
 		Orders: []meeting.Order{
 			{"peter-mueller@github.com", false, items},
 		},
