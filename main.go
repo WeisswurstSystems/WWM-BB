@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/WeisswurstSystems/WWM-BB/database"
+	"github.com/WeisswurstSystems/WWM-BB/security"
 	"github.com/gorilla/mux"
-	"github.com/weisswurstSystems/WWM-BB/database"
-	"github.com/weisswurstSystems/WWM-BB/security"
 	"gopkg.in/mgo.v2"
 )
 
