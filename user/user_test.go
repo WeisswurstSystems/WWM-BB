@@ -25,7 +25,7 @@ func TestUserEntity(t *testing.T) {
 	testMap := make(map[string]int)
 	testMap["Weisswurst"] = 2
 	testMap["Brezen"] = 1
-	u := user.User{"12345", "fabiwilms@gmail.com", []string{"admin", "user"}, testMap, true}
+	u := user.User{"12345", "fabiwilms@gmail.com", "testpassword", []string{"admin", "user"}, testMap, true}
 	data, _ := json.MarshalIndent(u, "", "  ")
 	if string(data) != userJSON {
 		t.Error("Wrong JSON!")
