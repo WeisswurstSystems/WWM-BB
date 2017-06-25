@@ -4,6 +4,7 @@ DOCKER_CMD=$(DOCKER_BUILD)/WWM-BB
 
 $(DOCKER_CMD): clean
 	mkdir -p $(DOCKER_BUILD)
+	$(GO_BUILD_ENV) go get
 	$(GO_BUILD_ENV) go build -v -o $(DOCKER_CMD) .
 
 clean:
