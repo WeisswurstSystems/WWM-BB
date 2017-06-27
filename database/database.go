@@ -1,6 +1,10 @@
 package database
 
 import (
+	"fmt"
+	"log"
+	"os"
+
 	"gopkg.in/mgo.v2"
 )
 

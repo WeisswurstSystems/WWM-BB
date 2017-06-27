@@ -3,6 +3,11 @@ package security
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/WeisswurstSystems/WWM-BB/database"
+	"github.com/WeisswurstSystems/WWM-BB/user"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 func DefaultAuthenticationHandler(realm string, next http.HandlerFunc) http.HandlerFunc {
@@ -27,6 +32,14 @@ func checkBasicAuth(r *http.Request) bool {
 	if !ok {
 		return false
 	}
-	//TODO Datenbankabfrage
-	return u == "user" && p == "user"
+
+	var findByUserMail user.User
+	err := database.Users.Find(bson.M{"mail": u}).One(&findByUserMail)
+
+	if err != nil {
+
+		return false
+	}
+
+	return p == findByUserMail.Password
 }

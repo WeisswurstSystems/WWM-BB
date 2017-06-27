@@ -8,3 +8,9 @@ type User struct {
 	DefaultOrders map[string]int `json:"defaultOrders"`
 	MailEnabled   bool           `json:"mailEnabled"`
 }
+
+type RegisterUser struct {
+	Mail        string `json:"mail"`
+	Password    string `json:"password"`
+	MailEnabled bool   `json:"mailEnabled"`
+}

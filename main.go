@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -11,7 +9,6 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/security"
 	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/gorilla/mux"
-	"gopkg.in/mgo.v2"
 )
 
 func main() {
@@ -21,8 +18,8 @@ func main() {
 
 	router := mux.NewRouter()
 	// unsecured endpoints
-	router.HandleFunc("/users", security.DefaultAuthenticationHandler("Please login to see all users.", userHandler.Read)).Methods("GET")
-	router.HandleFunc("/users", userHandler.Register).Methods("POST")
+	router.HandleFunc("/users", security.DefaultAuthenticationHandler("Please login to see all users.", user.Read)).Methods("GET")
+	router.HandleFunc("/users", user.Register).Methods("POST")
 
 	port := os.Getenv("PORT")
 	if len(port) == 0 {

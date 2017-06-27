@@ -3,15 +3,12 @@ package user
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
-	"os"
 
 	"github.com/WeisswurstSystems/WWM-BB/database"
-	"github.com/WeisswurstSystems/WWM-BB/security"
 	"github.com/WeisswurstSystems/WWM-BB/util"
-	"github.com/gorilla/mux"
-	"gopkg.in/mgo.v2"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 func Read(w http.ResponseWriter, req *http.Request) {
@@ -35,20 +32,31 @@ func Read(w http.ResponseWriter, req *http.Request) {
 
 func Register(w http.ResponseWriter, req *http.Request) {
 
-	var requestUser User
-	if r.Body == nil {
-		http.Error(w, "Please send a request body", 400)
+	if req.Body == nil {
+		http.Error(w, "Please send a request body", http.StatusBadRequest)
 		return
 	}
 
-	err := json.NewDecoder(r.Body).Decode(&requestUser)
+	var requestUser RegisterUser
+
+	err := json.NewDecoder(req.Body).Decode(&requestUser)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	if requestUser.Mail == "" {
+		http.Error(w, "Missing field: mail", http.StatusBadRequest)
+		return
+	}
+
+	if requestUser.Password == "" {
+		http.Error(w, "Missing field: password", http.StatusBadRequest)
+		return
+	}
+
 	var findByUserMail []User
-	err = database.User.Find(bson.M{"mail": requestUser.Mail}).All(&findByUserMail)
+	err = database.Users.Find(bson.M{"mail": requestUser.Mail}).All(&findByUserMail)
 	fmt.Println(findByUserMail)
 
 	if len(findByUserMail) > 0 {
@@ -57,14 +65,14 @@ func Register(w http.ResponseWriter, req *http.Request) {
 	}
 
 	registerUser := User{
-		UserID:      util.GetUID,
+		UserID:      util.GetUID(12),
 		Mail:        requestUser.Mail,
 		Password:    requestUser.Password,
 		Roles:       []string{"user"},
 		MailEnabled: requestUser.MailEnabled,
 	}
 
-	err := database.Users.Insert(&registerUser)
+	err = database.Users.Insert(&registerUser)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
