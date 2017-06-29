@@ -1,25 +1,24 @@
-package user
+package service
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
-	"github.com/WeisswurstSystems/WWM-BB/database"
-	"github.com/WeisswurstSystems/WWM-BB/util"
-
-	"gopkg.in/mgo.v2/bson"
+	"github.com/WeisswurstSystems/WWM-BB/user"
+	"github.com/WeisswurstSystems/WWM-BB/user/store"
 )
 
 func Read(w http.ResponseWriter, req *http.Request) {
-	var results []User
-	err := database.Users.Find(nil).All(&results)
+	results, err := store.FindAll()
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	js, err := json.Marshal(results)
+	var js []byte
+	js, err = json.Marshal(results)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -37,7 +36,7 @@ func Register(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var requestUser RegisterUser
+	var requestUser user.RegisterUser
 
 	err := json.NewDecoder(req.Body).Decode(&requestUser)
 	if err != nil {
@@ -55,24 +54,21 @@ func Register(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var findByUserMail []User
-	err = database.Users.Find(bson.M{"mail": requestUser.Mail}).All(&findByUserMail)
-	fmt.Println(findByUserMail)
-
-	if len(findByUserMail) > 0 {
+	has, _ := store.Has(requestUser.Mail)
+	if has {
 		http.Error(w, "User with Mail "+requestUser.Mail+" already exists.", http.StatusConflict)
 		return
 	}
 
-	registerUser := User{
-		UserID:      util.GetUID(12),
+	registerUser := user.User{
 		Mail:        requestUser.Mail,
 		Password:    requestUser.Password,
 		Roles:       []string{"user"},
 		MailEnabled: requestUser.MailEnabled,
 	}
 
-	err = database.Users.Insert(&registerUser)
+	err = store.Save(registerUser)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

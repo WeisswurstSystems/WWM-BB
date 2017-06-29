@@ -7,7 +7,7 @@ import (
 
 	"github.com/WeisswurstSystems/WWM-BB/database"
 	"github.com/WeisswurstSystems/WWM-BB/security"
-	"github.com/WeisswurstSystems/WWM-BB/user"
+	"github.com/WeisswurstSystems/WWM-BB/user/service"
 	"github.com/gorilla/mux"
 )
 
@@ -18,8 +18,8 @@ func main() {
 
 	router := mux.NewRouter()
 	// unsecured endpoints
-	router.HandleFunc("/users", security.DefaultAuthenticationHandler("Please login to see all users.", user.Read)).Methods("GET")
-	router.HandleFunc("/users", user.Register).Methods("POST")
+	router.HandleFunc("/users", security.DefaultAuthenticationHandler("Please login to see all users.", service.Read)).Methods("GET")
+	router.HandleFunc("/users", service.Register).Methods("POST")
 
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
