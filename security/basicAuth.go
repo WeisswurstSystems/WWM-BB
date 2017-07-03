@@ -14,7 +14,7 @@ func DefAuth(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		w.Header().Set("WWW-Authenticate", fmt.Sprintf(`Basic realm="%s"`, "Please login to see all users."))
+		w.Header().Set("WWW-Authenticate", fmt.Sprintf(`Basic realm="%s"`, "Your are not authenticated. Please sign in!"))
 		w.WriteHeader(401)
 		w.Write([]byte("401 Unauthorized\n"))
 	}
