@@ -7,14 +7,14 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/user/store"
 )
 
-func DefaultAuthenticationHandler(realm string, next http.HandlerFunc) http.HandlerFunc {
+func DefAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if checkBasicAuth(r) {
 			next(w, r)
 			return
 		}
 
-		w.Header().Set("WWW-Authenticate", fmt.Sprintf(`Basic realm="%s"`, realm))
+		w.Header().Set("WWW-Authenticate", fmt.Sprintf(`Basic realm="%s"`, "Please login to see all users."))
 		w.WriteHeader(401)
 		w.Write([]byte("401 Unauthorized\n"))
 	}

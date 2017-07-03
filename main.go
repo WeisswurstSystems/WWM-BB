@@ -6,8 +6,9 @@ import (
 	"os"
 
 	"github.com/WeisswurstSystems/WWM-BB/database"
+	meetingService "github.com/WeisswurstSystems/WWM-BB/meeting/service"
 	"github.com/WeisswurstSystems/WWM-BB/security"
-	"github.com/WeisswurstSystems/WWM-BB/user/service"
+	userService "github.com/WeisswurstSystems/WWM-BB/user/service"
 	"github.com/gorilla/mux"
 )
 
@@ -17,10 +18,15 @@ func main() {
 	defer database.DBSession.Close()
 
 	router := mux.NewRouter()
-	// unsecured endpoints
-	router.HandleFunc("/users", security.DefaultAuthenticationHandler("Please login to see all users.", service.Read)).Methods("GET")
-	router.HandleFunc("/users", service.Register).Methods("POST")
 
+	// unsecured endpoints
+	router.HandleFunc("/users", userService.Register).Methods("POST")
+	router.HandleFunc("/meetings", meetingService.Read).Methods("GET")
+
+	//secured endpoints
+	router.HandleFunc("/users", security.DefAuth(userService.Read)).Methods("GET")
+
+	// Let's go!
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
 		log.Printf("Starting on port 8080")
