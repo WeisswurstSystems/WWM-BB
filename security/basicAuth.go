@@ -3,6 +3,8 @@ package security
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/WeisswurstSystems/WWM-BB/user/store"
 )
 
 func DefaultAuthenticationHandler(realm string, next http.HandlerFunc) http.HandlerFunc {
@@ -23,10 +25,16 @@ func DefaultAuthenticationHandler(realm string, next http.HandlerFunc) http.Hand
 //func OrderAuthenticationHandler(next http.HandlerFunc, meetingid, order)
 
 func checkBasicAuth(r *http.Request) bool {
-	u, p, ok := r.BasicAuth()
+	usermail, password, ok := r.BasicAuth()
 	if !ok {
 		return false
 	}
-	//TODO Datenbankabfrage
-	return u == "user" && p == "user"
+
+	findByUserMail, err := store.FindByMail(usermail)
+
+	if err != nil {
+		return false
+	}
+
+	return password == findByUserMail.Password
 }
