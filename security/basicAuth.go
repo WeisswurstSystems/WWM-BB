@@ -8,6 +8,7 @@ import (
 	userStore "github.com/WeisswurstSystems/WWM-BB/user/store"
 	meetingStore "github.com/WeisswurstSystems/WWM-BB/meeting/store"
 	"github.com/gorilla/mux"
+	"github.com/WeisswurstSystems/WWM-BB/util"
 )
 
 func DefAuth(next http.HandlerFunc) http.HandlerFunc {
@@ -40,7 +41,16 @@ func MeetingAuthenticationHandler(next http.HandlerFunc) http.HandlerFunc{
 		vars := mux.Vars(r)
 		result, _ := meetingStore.FindOne(vars["meetingId"])
 
-		if uname,_,_ :=  r.BasicAuth(); result.Creator == uname {
+		// if he is the creator of the meeting...
+		uname,_,_ :=  r.BasicAuth()
+		if result.Creator == uname {
+			next(w, r)
+			return
+		}
+
+		// ... or if he has admin rights
+		findByUserMail, _ := userStore.FindByMail(uname)
+		if util.Contains(findByUserMail.Roles, "admin") {
 			next(w, r)
 			return
 		}
