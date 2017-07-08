@@ -10,7 +10,7 @@ type Store interface {
 	Has(email string) (bool, error)
 	FindByMail(email string) (user.User, error)
 	FindAll() ([]user.User, error)
-	Save(user user.User) error
+	Save(user user.User) (user.User, error)
 }
 
 func Has(email string) (bool, error) {
@@ -30,6 +30,7 @@ func FindAll() ([]user.User, error) {
 	return results, err
 }
 
-func Save(user user.User) error {
-	return database.Users.Insert(&user)
+func Save(user user.User) (user.User, error) {
+	err := database.Users.Insert(&user)
+	return user, err
 }

@@ -3,24 +3,62 @@ package security
 import (
 	"fmt"
 	"net/http"
+	"log"
 
-	"github.com/WeisswurstSystems/WWM-BB/user/store"
+	userStore "github.com/WeisswurstSystems/WWM-BB/user/store"
+	meetingStore "github.com/WeisswurstSystems/WWM-BB/meeting/store"
+	"github.com/gorilla/mux"
+	"github.com/WeisswurstSystems/WWM-BB/util"
 )
 
-func DefaultAuthenticationHandler(realm string, next http.HandlerFunc) http.HandlerFunc {
+func DefAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		uname, _, _ := r.BasicAuth()
 		if checkBasicAuth(r) {
+			log.Printf("User %v authorized.", uname);
 			next(w, r)
 			return
 		}
 
-		w.Header().Set("WWW-Authenticate", fmt.Sprintf(`Basic realm="%s"`, realm))
+		log.Printf("User %v: wrong password or not registered.", uname)
+		w.Header().Set("WWW-Authenticate", fmt.Sprintf(`Basic realm="%s"`, "Your are not authenticated. Please sign in!"))
 		w.WriteHeader(401)
 		w.Write([]byte("401 Unauthorized\n"))
 	}
 }
 
-//func MeetingAuthenticationHandler(next http.HandlerFunc), meetingid)
+func GetCurrentUser(r *http.Request) string {
+	usermail, _, ok := r.BasicAuth();
+	if ok {
+		return usermail
+	} else {
+		return ""
+	}
+}
+
+func MeetingAuthenticationHandler(next http.HandlerFunc) http.HandlerFunc{
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		result, _ := meetingStore.FindOne(vars["meetingId"])
+
+		// if he is the creator of the meeting...
+		uname,_,_ :=  r.BasicAuth()
+		if result.Creator == uname {
+			next(w, r)
+			return
+		}
+
+		// ... or if he has admin rights
+		findByUserMail, _ := userStore.FindByMail(uname)
+		if util.Contains(findByUserMail.Roles, "admin") {
+			next(w, r)
+			return
+		}
+
+		w.WriteHeader(401)
+		w.Write([]byte("401 Unauthorized\n"))
+	}
+}
 
 //func OrderAuthenticationHandler(next http.HandlerFunc, meetingid, order)
 
@@ -30,7 +68,7 @@ func checkBasicAuth(r *http.Request) bool {
 		return false
 	}
 
-	findByUserMail, err := store.FindByMail(usermail)
+	findByUserMail, err := userStore.FindByMail(usermail)
 
 	if err != nil {
 		return false

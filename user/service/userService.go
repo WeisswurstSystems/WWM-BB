@@ -67,7 +67,7 @@ func Register(w http.ResponseWriter, req *http.Request) {
 		MailEnabled: requestUser.MailEnabled,
 	}
 
-	err = store.Save(registerUser)
+	registerUser, err = store.Save(registerUser)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

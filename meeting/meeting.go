@@ -17,3 +17,11 @@ type Meeting struct {
 	Orders    []Order           `json:"orders"`
 	Products  []product.Product `json:"products"`
 }
+
+type ReducedMeeting struct {
+	ID        string            `json:"id"`
+	Place     string            `json:"place"`
+	Date      time.Time         `json:"date"`
+	CloseDate time.Time         `json:"closeDate"`
+	Closed    bool              `json:"closed"`
+}
