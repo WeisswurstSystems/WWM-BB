@@ -21,10 +21,12 @@ func main() {
 
 	// unsecured endpoints
 	router.HandleFunc("/users", userService.Register).Methods("POST")
-	router.HandleFunc("/meetings", meetingService.Read).Methods("GET")
+	router.HandleFunc("/meetings", meetingService.ReadAll).Methods("GET")
+	router.HandleFunc("/meetings/{meetingId}", meetingService.ReadSingle).Methods("GET")
 
 	//secured endpoints
 	router.HandleFunc("/users", security.DefAuth(userService.Read)).Methods("GET")
+	router.HandleFunc("/meetings", security.DefAuth(meetingService.Create)).Methods("POST")
 
 	// Let's go!
 	port := os.Getenv("PORT")
