@@ -4,7 +4,7 @@ go:
 before_deploy:
 - export PATH=$PATH:$HOME/gopath/bin
 - go get github.com/tools/godep
-- godep restore
+- godep save
 deploy:
   provider: heroku
   app: wwm-bb
