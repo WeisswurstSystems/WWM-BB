@@ -4,6 +4,7 @@ go:
 deploy:
   provider: heroku
   app: wwm-bb
+  skip_cleanup: true
   on:
     repo: WeisswurstSystems/WWM-BB
   api-key:
