@@ -2,9 +2,9 @@ language: go
 go:
 - 1.8.x
 before_deploy:
-- test $TRAVIS_TEST_RESULT = 0 \
-  && go get github.com/tools/godep \
-  && godep save
+- export PATH=$PATH:$HOME/gopath/bin
+- go get github.com/tools/godep
+- godep restore
 deploy:
   provider: heroku
   app: wwm-bb
