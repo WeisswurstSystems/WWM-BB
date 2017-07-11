@@ -3,7 +3,7 @@ go:
 - 1.8.x
 before_deploy:
 - test $TRAVIS_TEST_RESULT = 0 \
-  && go get github.com/tools/godep
+  && go get github.com/tools/godep \
   && godep save
 deploy:
   provider: heroku
