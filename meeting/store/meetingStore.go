@@ -51,6 +51,5 @@ func Create(meeting meeting.Meeting) (meeting.Meeting, error) {
 
 
 func Save(meeting meeting. Meeting) error {
-	_, err := database.Meetings.UpsertId(meeting.ID, bson.M{"$set": meeting})
-	return err
+	return database.Meetings.Update(bson.M{"id": meeting.ID}, meeting)
 }

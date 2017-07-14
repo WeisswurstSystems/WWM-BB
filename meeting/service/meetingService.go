@@ -13,6 +13,7 @@ import (
 	"strings"
 	"strconv"
 	"github.com/gorilla/mux"
+	"log"
 )
 
 func SetPlace(w http.ResponseWriter, req *http.Request) {
@@ -135,7 +136,7 @@ func AddProduct(w http.ResponseWriter, req *http.Request) {
 	})
 
 	if index != -1 {
-		http.Error(w, "Product with name " + newProduct.Name + " already exists in meeting with ID " + result.ID, http.StatusInternalServerError)
+		http.Error(w, "Product with name "+newProduct.Name+" already exists in meeting with ID "+result.ID, http.StatusInternalServerError)
 		return
 	}
 
@@ -184,11 +185,41 @@ func ChangeProduct(w http.ResponseWriter, req *http.Request) {
 	})
 
 	if index == -1 {
-		http.Error(w, "No product with name " + newProduct.Name + " is in meeting with ID " + result.ID, http.StatusInternalServerError)
+		http.Error(w, "No product with name "+newProduct.Name+" is in meeting with ID "+result.ID, http.StatusInternalServerError)
 		return
 	}
 
 	result.Products[index] = newProduct
+	err = store.Save(result)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func CloseMeeting(w http.ResponseWriter, req *http.Request) {
+	setIsMeetingClosed(true, w, req)
+}
+
+func OpenMeeting(w http.ResponseWriter, req *http.Request) {
+	setIsMeetingClosed(false, w, req)
+}
+
+func setIsMeetingClosed(isClosed bool, w http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	result, err := store.FindOne(vars["meetingId"])
+
+	log.Printf("Closing meeting %v", vars["meetingId"])
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	result.Closed = isClosed
 	err = store.Save(result)
 
 	if err != nil {

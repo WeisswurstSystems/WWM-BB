@@ -34,6 +34,8 @@ func main() {
 	router.HandleFunc("/meetings/{meetingId}/setBuyer", security.DefAuth(security.MeetingAuthenticationHandler(meetingService.SetBuyer))).Methods("POST")
 	router.HandleFunc("/meetings/{meetingId}/addProduct", security.DefAuth(security.MeetingAuthenticationHandler(meetingService.AddProduct))).Methods("POST")
 	router.HandleFunc("/meetings/{meetingId}/changeProduct", security.DefAuth(security.MeetingAuthenticationHandler(meetingService.ChangeProduct))).Methods("POST")
+	router.HandleFunc("/meetings/{meetingId}/closeMeeting", security.DefAuth(security.MeetingAuthenticationHandler(meetingService.CloseMeeting))).Methods("POST")
+	router.HandleFunc("/meetings/{meetingId}/openMeeting", security.DefAuth(security.MeetingAuthenticationHandler(meetingService.OpenMeeting))).Methods("POST")
 
 	// Let's go!
 	port := os.Getenv("PORT")
