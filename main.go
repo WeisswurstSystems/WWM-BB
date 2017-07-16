@@ -10,9 +10,12 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/security"
 	userService "github.com/WeisswurstSystems/WWM-BB/user/service"
 	"github.com/gorilla/mux"
+	"github.com/WeisswurstSystems/WWM-BB/mail"
 )
 
 func main() {
+	// Setting up Mail-Client
+	mail.Init()
 	// Opening Database Connection...
 	database.Init()
 	defer database.DBSession.Close()

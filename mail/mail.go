@@ -33,7 +33,7 @@ Subject: {{.Subject}}
 Servus von {{.From}}
 `
 
-const LOG_TAG = "MAIL_CLIENT"
+const LOG_TAG = "[MAIL_CLIENT]"
 
 var (
 	emailUser EmailUser
