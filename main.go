@@ -24,6 +24,7 @@ func main() {
 
 	// unsecured endpoints
 	router.HandleFunc("/users", userService.Register).Methods("POST")
+	router.HandleFunc("/users/register/{registrationID}", userService.Activate).Methods("GET")
 	router.HandleFunc("/meetings", meetingService.ReadAll).Methods("GET")
 	router.HandleFunc("/meetings/{meetingId}", meetingService.ReadSingle).Methods("GET")
 

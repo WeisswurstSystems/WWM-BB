@@ -6,6 +6,10 @@ import (
 
 	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/WeisswurstSystems/WWM-BB/user/store"
+	"github.com/WeisswurstSystems/WWM-BB/util"
+	"github.com/WeisswurstSystems/WWM-BB/mail"
+	"github.com/gorilla/mux"
+	"log"
 )
 
 func Read(w http.ResponseWriter, req *http.Request) {
@@ -60,12 +64,17 @@ func Register(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	uid := util.GetUID(60)
+
 	registerUser := user.User{
 		Mail:        requestUser.Mail,
 		Password:    requestUser.Password,
+		RegistrationID: uid,
 		Roles:       []string{"user"},
 		MailEnabled: requestUser.MailEnabled,
 	}
+
+	mail.SendRegistrationMail(uid, requestUser.Mail)
 
 	registerUser, err = store.Save(registerUser)
 
@@ -83,4 +92,21 @@ func Register(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	w.Write(js)
+}
+
+func Activate(w http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	result, err := store.FindByRegID(vars["registrationID"])
+	if err != nil {
+		http.Error(w, "User with this ID was already activated", http.StatusBadRequest)
+		return
+	}
+	result.RegistrationID = ""
+	err = store.Update(result)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	log.Printf("Successfully unlocked user %v", result.Mail)
+	http.Redirect(w, req, "http://www.google.com", 301)
 }
