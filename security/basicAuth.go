@@ -13,13 +13,14 @@ import (
 )
 
 func DefAuth(next http.HandlerFunc) http.HandlerFunc {
+	LOG_TAG := "[DefAuth]"
 	return func(w http.ResponseWriter, r *http.Request) {
 		uname, _, _ := r.BasicAuth()
 
 		authenticated, err := checkBasicAuth(r)
 
 		if(err != nil) {
-			log.Printf("User %v didn't finish his registration process.", uname);
+			log.Printf("%v User %v didn't finish his registration process.", LOG_TAG, uname);
 			w.Header().Set("WWW-Authenticate", fmt.Sprintf(`Basic realm="%s"`, "Please finish your registration before using this app."))
 			w.WriteHeader(401)
 			w.Write([]byte("401 Unregistered\n"))
@@ -27,15 +28,15 @@ func DefAuth(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		if authenticated {
-			log.Printf("User %v authorized.", uname);
+			log.Printf("%v User %v authorized for request to %v.", LOG_TAG, uname, r.URL);
 			next(w, r)
 			return
 		}
 
-		log.Printf("User %v: wrong password or not registered.", uname)
+		log.Printf("%v User %v: wrong password or not registered.", LOG_TAG, uname)
 		w.Header().Set("WWW-Authenticate", fmt.Sprintf(`Basic realm="%s"`, "Your are not authenticated. Please sign in!"))
 		w.WriteHeader(401)
-		w.Write([]byte("401 Unauthorized\n"))
+		w.Write([]byte("401 Unauthorized - Please login to access this resource.\n"))
 	}
 }
 
@@ -49,6 +50,7 @@ func GetCurrentUser(r *http.Request) string {
 }
 
 func MeetingAuthenticationHandler(next http.HandlerFunc) http.HandlerFunc{
+	LOG_TAG := "[MeetingAuthenticationHandler]"
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		result, _ := meetingStore.FindOne(vars["meetingId"])
@@ -56,6 +58,7 @@ func MeetingAuthenticationHandler(next http.HandlerFunc) http.HandlerFunc{
 		// if he is the creator of the meeting...
 		uname,_,_ :=  r.BasicAuth()
 		if result.Creator == uname {
+			log.Printf("%v, User %v is owner of meeting %v.", LOG_TAG, uname, result.ID);
 			next(w, r)
 			return
 		}
@@ -68,7 +71,7 @@ func MeetingAuthenticationHandler(next http.HandlerFunc) http.HandlerFunc{
 		}
 
 		w.WriteHeader(401)
-		w.Write([]byte("401 Unauthorized\n"))
+		w.Write([]byte("401 Unauthorized - Your are not the Owner of this meeting.\n"))
 	}
 }
 

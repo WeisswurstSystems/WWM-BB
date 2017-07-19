@@ -13,6 +13,7 @@ type Store interface {
 	FindAllReduced() ([]meeting.ReducedMeeting, error)
 	FindOne(id string) (meeting.Meeting, error)
 	Create(meeting meeting.Meeting) (meeting.Meeting, error)
+	Update(meeting meeting. Meeting) error
 }
 
 func Count() (int, error) {
@@ -46,4 +47,9 @@ func FindOne(id string) (meeting.Meeting, error) {
 func Create(meeting meeting.Meeting) (meeting.Meeting, error) {
 	err := database.Meetings.Insert(&meeting)
 	return meeting, err
+}
+
+
+func Update(meeting meeting. Meeting) error {
+	return database.Meetings.Update(bson.M{"id": meeting.ID}, meeting)
 }
