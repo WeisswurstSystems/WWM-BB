@@ -293,7 +293,7 @@ func Create(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	meeting.ID = util.GetUID(12)
+	meeting.ID = util.GetReadableUID()
 	meeting, err = store.Create(meeting)
 
 	if err != nil {
