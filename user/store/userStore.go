@@ -32,10 +32,17 @@ func FindByRegID(id string) (user.User, error) {
 	return findByRegId, err
 }
 
-
+// Returns all _active_ users. This func does not return users which have not finished registering
 func FindAll() ([]user.User, error) {
 	var results []user.User
-	err := database.Users.Find(nil).All(&results)
+	err := database.Users.Find(bson.M{"registrationid": ""}).All(&results)
+	return results, err
+}
+
+// Returns all inactive users --> Users which have not completed the registration process.
+func FindAllUnregistered() ([]user.User, error) {
+	var results []user.User
+	err := database.Users.Find(bson.M{"registrationid": bson.M{"$ne" : ""}}).All(&results)
 	return results, err
 }
 

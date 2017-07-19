@@ -9,12 +9,24 @@ import (
 	meetingStore "github.com/WeisswurstSystems/WWM-BB/meeting/store"
 	"github.com/gorilla/mux"
 	"github.com/WeisswurstSystems/WWM-BB/util"
+	"errors"
 )
 
 func DefAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		uname, _, _ := r.BasicAuth()
-		if checkBasicAuth(r) {
+
+		authenticated, err := checkBasicAuth(r)
+
+		if(err != nil) {
+			log.Printf("User %v didn't finish his registration process.", uname);
+			w.Header().Set("WWW-Authenticate", fmt.Sprintf(`Basic realm="%s"`, "Please finish your registration before using this app."))
+			w.WriteHeader(401)
+			w.Write([]byte("401 Unregistered\n"))
+			return
+		}
+
+		if authenticated {
 			log.Printf("User %v authorized.", uname);
 			next(w, r)
 			return
@@ -62,17 +74,21 @@ func MeetingAuthenticationHandler(next http.HandlerFunc) http.HandlerFunc{
 
 //func OrderAuthenticationHandler(next http.HandlerFunc, meetingid, order)
 
-func checkBasicAuth(r *http.Request) bool {
+func checkBasicAuth(r *http.Request) (bool, error) {
 	usermail, password, ok := r.BasicAuth()
 	if !ok {
-		return false
+		return false, nil
 	}
 
 	findByUserMail, err := userStore.FindByMail(usermail)
 
 	if err != nil {
-		return false
+		return false, nil
 	}
 
-	return password == findByUserMail.Password
+	if findByUserMail.RegistrationID == "" {
+		return password == findByUserMail.Password, nil
+	} else {
+		return false, errors.New("Please finish your registration!")
+	}
 }
