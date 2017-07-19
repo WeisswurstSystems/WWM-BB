@@ -33,7 +33,7 @@ func SetPlace(w http.ResponseWriter, req *http.Request) {
 	}
 
 	result.Place = newPlace
-	err = store.Save(result)
+	err = store.Update(result)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -65,7 +65,7 @@ func SetDate(w http.ResponseWriter, req *http.Request) {
 	}
 
 	result.Date = newDate
-	err = store.Save(result)
+	err = store.Update(result)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -92,7 +92,7 @@ func SetBuyer(w http.ResponseWriter, req *http.Request) {
 	}
 
 	result.Buyer = newBuyer
-	err = store.Save(result)
+	err = store.Update(result)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -141,7 +141,7 @@ func AddProduct(w http.ResponseWriter, req *http.Request) {
 	}
 
 	result.Products = append(result.Products, newProduct)
-	err = store.Save(result)
+	err = store.Update(result)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -190,7 +190,7 @@ func ChangeProduct(w http.ResponseWriter, req *http.Request) {
 	}
 
 	result.Products[index] = newProduct
-	err = store.Save(result)
+	err = store.Update(result)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -220,7 +220,7 @@ func setIsMeetingClosed(isClosed bool, w http.ResponseWriter, req *http.Request)
 	}
 
 	result.Closed = isClosed
-	err = store.Save(result)
+	err = store.Update(result)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
