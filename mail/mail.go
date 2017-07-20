@@ -6,7 +6,6 @@ import (
 	"net/smtp"
 	"text/template"
 	"strconv"
-	"strings"
 	"bytes"
 )
 
@@ -18,20 +17,9 @@ type EmailUser struct {
 }
 
 type SmtpTemplateData struct {
-	From    string
-	To      string
 	Subject string
 	Body    string
 }
-
-const emailTemplate = `From: {{.From}}
-To: {{.To}}
-Subject: {{.Subject}}
-
-{{.Body}}
-
-Servus von {{.From}}
-`
 
 const LOG_TAG = "[MAIL_CLIENT]"
 
@@ -80,13 +68,9 @@ func SendMail(topic string, message string, receivers []string) error{
 		os.Exit(1)
 	}
 
-	context := &SmtpTemplateData{
-		"Weisswurst-Systems",
-		strings.Join(receivers[:],", "),
-		topic,
-		message}
-	t := template.New("emailTemplate")
-	t, err := t.Parse(emailTemplate)
+	context := &SmtpTemplateData{topic, message}
+	t := template.New("EmailTemplate")
+	t, err := t.Parse(EmailTemplate)
 	if err != nil {
 		log.Fatalf("%v error trying to parse mail template", LOG_TAG)
 		return err
@@ -101,7 +85,7 @@ func SendMail(topic string, message string, receivers []string) error{
 
 	err = smtp.SendMail(emailUser.EmailServer+":"+strconv.Itoa(emailUser.Port),
 		smtpAuth,
-		emailUser.Username,
+		"Weisswurst Systems",
 		receivers,
 		doc.Bytes())
 	if err != nil {
