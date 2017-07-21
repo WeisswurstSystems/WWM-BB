@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"net/http"
-	"github.com/WeisswurstSystems/WWM-BB/user/store"
 	"encoding/json"
+	"github.com/WeisswurstSystems/WWM-BB/user/store"
+	"net/http"
 )
 
 func Read(w http.ResponseWriter, req *http.Request) {
@@ -21,5 +21,4 @@ func Read(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 }
