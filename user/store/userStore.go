@@ -42,7 +42,7 @@ func FindAll() ([]user.User, error) {
 // Returns all inactive users --> Users which have not completed the registration process.
 func FindAllUnregistered() ([]user.User, error) {
 	var results []user.User
-	err := database.Users.Find(bson.M{"registrationid": bson.M{"$ne" : ""}}).All(&results)
+	err := database.Users.Find(bson.M{"registrationid": bson.M{"$ne": ""}}).All(&results)
 	return results, err
 }
 

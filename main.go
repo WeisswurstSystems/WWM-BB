@@ -6,11 +6,11 @@ import (
 	"os"
 
 	"github.com/WeisswurstSystems/WWM-BB/database"
+	"github.com/WeisswurstSystems/WWM-BB/mail"
 	meetingService "github.com/WeisswurstSystems/WWM-BB/meeting/service"
 	"github.com/WeisswurstSystems/WWM-BB/security"
-	userService "github.com/WeisswurstSystems/WWM-BB/user/service"
+	userHandler "github.com/WeisswurstSystems/WWM-BB/user/handler"
 	"github.com/gorilla/mux"
-	"github.com/WeisswurstSystems/WWM-BB/mail"
 )
 
 func main() {
@@ -23,13 +23,13 @@ func main() {
 	router := mux.NewRouter()
 
 	// unsecured endpoints
-	router.HandleFunc("/users", userService.Register).Methods("POST")
-	router.HandleFunc("/users/register/{registrationID}", userService.Activate).Methods("GET")
+	router.HandleFunc("/users/do/register", userHandler.Register).Methods("POST")
+	router.HandleFunc("/users/do/activate", userHandler.Activate).Methods("POST")
 	router.HandleFunc("/meetings", meetingService.ReadAll).Methods("GET")
 	router.HandleFunc("/meetings/{meetingId}", meetingService.ReadSingle).Methods("GET")
 
 	// secured endpoints
-	router.HandleFunc("/users", security.DefAuth(userService.Read)).Methods("GET")
+	router.HandleFunc("/users", security.DefAuth(userHandler.Read)).Methods("GET")
 	router.HandleFunc("/meetings", security.DefAuth(meetingService.Create)).Methods("POST")
 
 	// secured and only meeting owner endpoints
