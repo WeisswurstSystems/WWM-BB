@@ -16,3 +16,11 @@ type Store interface {
 	FindAll() ([]User, error)
 	FindByRegistrationID(registrationID string) (User, error)
 }
+
+func (user User) Authenticate(password string) bool {
+	return user.RegistrationID == "" && password == user.Password
+}
+
+func (user User) IsRegistered() bool {
+	return user.RegistrationID != ""
+}
