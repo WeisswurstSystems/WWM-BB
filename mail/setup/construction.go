@@ -1,4 +1,4 @@
-package mail
+package setup
 
 import "github.com/WeisswurstSystems/WWM-BB/mail"
 

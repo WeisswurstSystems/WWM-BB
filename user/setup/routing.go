@@ -1,4 +1,4 @@
-package user
+package setup
 
 import "github.com/gorilla/mux"
 

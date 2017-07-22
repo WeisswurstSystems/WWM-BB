@@ -1,7 +1,7 @@
-package user
+package setup
 
 import (
-	"github.com/WeisswurstSystems/WWM-BB/wwm/mail"
+	mailsetup "github.com/WeisswurstSystems/WWM-BB/mail/setup"
 
 	"github.com/WeisswurstSystems/WWM-BB/user/middleware"
 	"github.com/WeisswurstSystems/WWM-BB/user/store"
@@ -13,7 +13,7 @@ var Store = store.NewMongoStore()
 
 var Interactor = usecase.Interactor{
 	UserStore:   Store,
-	MailService: mail.MailService,
+	MailService: mailsetup.MailService,
 }
 
 var Command = webhandler.CommandHandler{
