@@ -9,21 +9,16 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/mail"
 	meetingService "github.com/WeisswurstSystems/WWM-BB/meeting/service"
 	"github.com/WeisswurstSystems/WWM-BB/security"
-	userHandler "github.com/WeisswurstSystems/WWM-BB/user/handler"
+	userHandler "github.com/WeisswurstSystems/WWM-BB/user/webhandler"
 	"github.com/gorilla/mux"
 )
 
 func main() {
-	// Setting up Mail-Client
-	mail.Init()
-	// Opening Database Connection...
-	database.Init()
-	defer database.DBSession.Close()
-
+	mailService := mail.NewSMTPService()
 	router := mux.NewRouter()
 
 	// unsecured endpoints
-	router.HandleFunc("/users/do/register", userHandler.Register).Methods("POST")
+	router.HandleFunc("/users/do/register", userHandler.RegisterHandler(&mailService)).Methods("POST")
 	router.HandleFunc("/users/do/activate", userHandler.Activate).Methods("POST")
 	router.HandleFunc("/meetings", meetingService.ReadAll).Methods("GET")
 	router.HandleFunc("/meetings/{meetingId}", meetingService.ReadSingle).Methods("GET")

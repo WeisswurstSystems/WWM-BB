@@ -1,4 +1,4 @@
-package handler
+package webhandler
 
 import (
 	"encoding/json"
@@ -6,21 +6,21 @@ import (
 	"net/http"
 )
 
-func Register(w http.ResponseWriter, req *http.Request) {
+func (ch *CommandHandler) Register(w http.ResponseWriter, req *http.Request) {
 	if req.Body == nil {
 		http.Error(w, "Please send a request body", http.StatusBadRequest)
 		return
 	}
 
-	var register event.Register
-	err := json.NewDecoder(req.Body).Decode(&register)
+	var e event.Register
+	err := json.NewDecoder(req.Body).Decode(&e)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	if err = register.Execute(); err != nil {
-		if ee, ok := err.(*event.EventError); ok {
+	if err = ch.UserInteractor.Register(e); err != nil {
+		if ee, ok := err.(*event.Error); ok {
 			http.Error(w, ee.Message, ee.Code)
 		} else {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -30,16 +30,16 @@ func Register(w http.ResponseWriter, req *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-func Activate(w http.ResponseWriter, req *http.Request) {
+func (ch *CommandHandler) Activate(w http.ResponseWriter, req *http.Request) {
 	if req.Body == nil {
 		http.Error(w, "Please send a request body", http.StatusBadRequest)
 		return
 	}
-	var activate event.Activate
-	err := json.NewDecoder(req.Body).Decode(&activate)
+	var e event.Activate
+	err := json.NewDecoder(req.Body).Decode(&e)
 
-	if err = activate.Execute(); err != nil {
-		if ee, ok := err.(*event.EventError); ok {
+	if err = ch.UserInteractor.Activate(e); err != nil {
+		if ee, ok := err.(*event.Error); ok {
 			http.Error(w, ee.Message, ee.Code)
 		} else {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

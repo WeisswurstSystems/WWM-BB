@@ -1,13 +1,12 @@
-package handler
+package webhandler
 
 import (
 	"encoding/json"
-	"github.com/WeisswurstSystems/WWM-BB/user/store"
 	"net/http"
 )
 
-func Read(w http.ResponseWriter, req *http.Request) {
-	results, err := store.FindAll()
+func (ch *QueryHandler) Read(w http.ResponseWriter, req *http.Request) {
+	results, err := ch.UserStore.FindAll()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

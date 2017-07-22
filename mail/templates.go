@@ -1,5 +1,10 @@
 package mail
 
+type SmtpTemplateData struct {
+	Subject string
+	Body    string
+}
+
 const EmailTemplate = `MIME-version: 1.0;
 Content-Type: text/html;
 charset: "UTF-8";

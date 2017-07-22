@@ -2,11 +2,11 @@ package event
 
 import "fmt"
 
-type EventError struct {
+type Error struct {
 	Message string
 	Code    int
 }
 
-func (err EventError) Error() string {
+func (err Error) Error() string {
 	return fmt.Sprintf("%v: %v", err.Code, err.Message)
 }

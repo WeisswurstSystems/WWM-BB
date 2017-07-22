@@ -1,4 +1,4 @@
-package handler
+package webhandler
 
 import (
 	"github.com/WeisswurstSystems/WWM-BB/database"
@@ -12,8 +12,9 @@ import (
 const singleUserJson = `[{"mail":"fabian.wilms@gmail.com","roles":[],"defaultOrders":{},"mailEnabled":false}]
 `
 
+var qh QueryHandler
+
 func TestRead(t *testing.T) {
-	database.Init()
 	database.Users.DropCollection()
 	store.Save(user.User{Mail: "fabian.wilms@gmail.com"})
 
@@ -23,7 +24,7 @@ func TestRead(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	h := http.HandlerFunc(Read)
+	h := http.HandlerFunc(qh.Read)
 	h.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
