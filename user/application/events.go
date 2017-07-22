@@ -1,4 +1,4 @@
-package event
+package application
 
 import "net/http"
 

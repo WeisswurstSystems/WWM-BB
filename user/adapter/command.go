@@ -1,8 +1,8 @@
-package webhandler
+package adapter
 
 import (
 	"encoding/json"
-	"github.com/WeisswurstSystems/WWM-BB/user/event"
+	"github.com/WeisswurstSystems/WWM-BB/user/application"
 	"net/http"
 )
 
@@ -12,7 +12,7 @@ func (ch *CommandHandler) Register(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var e event.Register
+	var e application.Register
 	err := json.NewDecoder(req.Body).Decode(&e)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -20,7 +20,7 @@ func (ch *CommandHandler) Register(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if err = ch.UserInteractor.Register(e); err != nil {
-		if ee, ok := err.(*event.Error); ok {
+		if ee, ok := err.(*application.Error); ok {
 			http.Error(w, ee.Message, ee.Code)
 		} else {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -35,11 +35,11 @@ func (ch *CommandHandler) Activate(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, "Please send a request body", http.StatusBadRequest)
 		return
 	}
-	var e event.Activate
+	var e application.Activate
 	err := json.NewDecoder(req.Body).Decode(&e)
 
 	if err = ch.UserInteractor.Activate(e); err != nil {
-		if ee, ok := err.(*event.Error); ok {
+		if ee, ok := err.(*application.Error); ok {
 			http.Error(w, ee.Message, ee.Code)
 		} else {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

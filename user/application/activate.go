@@ -1,15 +1,14 @@
-package usecase
+package application
 
 import (
-	"github.com/WeisswurstSystems/WWM-BB/user/event"
 	"log"
 	"net/http"
 )
 
-func (i *Interactor) Activate(e event.Activate) error {
+func (i *Interactor) Activate(e Activate) error {
 	result, err := i.UserStore.FindByRegistrationID(e.RegistrationID)
 	if err != nil {
-		return &event.Error{"User with this ID was already activated", http.StatusBadRequest}
+		return &Error{"User with this ID was already activated", http.StatusBadRequest}
 	}
 	result.RegistrationID = ""
 	err = i.UserStore.Save(result)

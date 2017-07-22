@@ -1,4 +1,4 @@
-package webhandler
+package adapter
 
 import (
 	"encoding/json"

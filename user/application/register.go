@@ -1,4 +1,4 @@
-package usecase
+package application
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func (interactor *Interactor) Register(e event.Register) error {
+func (interactor *Interactor) Register(e Register) error {
 	if err := e.Validate(); err != nil {
 		return err
 	}
@@ -36,12 +36,12 @@ func (interactor *Interactor) isFree(mail string) error {
 	}
 	if user {
 		message := fmt.Sprintf("User with Mail %v already exists.", mail)
-		return &event.Error{message, http.StatusConflict}
+		return &Error{message, http.StatusConflict}
 	}
 	return nil
 }
 
-func buildUser(e event.Register) user.User {
+func buildUser(e Register) user.User {
 	uid := util.GetUID(60)
 	return user.User{
 		Mail:           e.Mail,

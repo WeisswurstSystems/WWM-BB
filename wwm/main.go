@@ -2,7 +2,7 @@ package wwm
 
 import (
 	"github.com/WeisswurstSystems/WWM-BB/security"
-	user "github.com/WeisswurstSystems/WWM-BB/user/setup"
+	user "github.com/WeisswurstSystems/WWM-BB/user/driver"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"

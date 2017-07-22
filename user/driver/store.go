@@ -1,4 +1,4 @@
-package store
+package driver
 
 import (
 	"github.com/WeisswurstSystems/WWM-BB/database"
