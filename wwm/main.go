@@ -1,13 +1,8 @@
-package main
+package wwm
 
 import (
-	"github.com/WeisswurstSystems/WWM-BB/mail"
-	"github.com/WeisswurstSystems/WWM-BB/meeting/store"
 	"github.com/WeisswurstSystems/WWM-BB/security"
-	userMiddleware "github.com/WeisswurstSystems/WWM-BB/user/middleware"
-	userStore "github.com/WeisswurstSystems/WWM-BB/user/store"
-	userUsecase "github.com/WeisswurstSystems/WWM-BB/user/usecase"
-	userHandler "github.com/WeisswurstSystems/WWM-BB/user/webhandler"
+	"github.com/WeisswurstSystems/WWM-BB/wwm/user"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -15,37 +10,15 @@ import (
 )
 
 func main() {
-	//entities
-	mailService := mail.NewSMTPService()
-	userStore := userStore.NewMongoStore()
-
-	//usecase
-	userInteractor := userUsecase.Interactor{
-		UserStore:   userStore,
-		MailService: mailService,
-	}
-
-	//handler
-	userCommand := userHandler.CommandHandler{
-		UserInteractor: userInteractor,
-	}
-	userQuery := userHandler.QueryHandler{
-		UserStore: userStore,
-	}
-	userMiddleware := userMiddleware.MiddlewareHandler{
-		UserStore: userStore,
-	}
-
 	router := mux.NewRouter()
 
+	userRouter := router.PathPrefix("/users").Subrouter()
+	user.AddUserRoutes(userRouter)
+
 	// unsecured endpoints
-	router.HandleFunc("/users/do/register", userCommand.Register).Methods("POST")
-	router.HandleFunc("/users/do/activate", userCommand.Activate).Methods("POST")
 	router.HandleFunc("/meetings", meetingService.ReadAll).Methods("GET")
 	router.HandleFunc("/meetings/{meetingId}", meetingService.ReadSingle).Methods("GET")
 
-	// secured endpoints
-	router.HandleFunc("/users", userMiddleware.Authenticated(userQuery.Read)).Methods("GET")
 	router.HandleFunc("/meetings", security.DefAuth(meetingService.Create)).Methods("POST")
 
 	// secured and only meeting owner endpoints
