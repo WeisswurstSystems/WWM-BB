@@ -1,8 +1,8 @@
 package main
 
 import (
-	meeting "github.com/WeisswurstSystems/WWM-BB/meeting/driver"
-	user "github.com/WeisswurstSystems/WWM-BB/user/driver"
+	meeting "github.com/WeisswurstSystems/WWM-BB/meeting/construction"
+	user "github.com/WeisswurstSystems/WWM-BB/user/construction"
 
 	"github.com/gorilla/mux"
 	"log"

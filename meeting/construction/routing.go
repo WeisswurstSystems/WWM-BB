@@ -1,4 +1,4 @@
-package driver
+package construction
 
 import (
 	"github.com/WeisswurstSystems/WWM-BB/wwm"

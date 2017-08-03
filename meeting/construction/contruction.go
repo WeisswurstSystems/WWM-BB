@@ -1,13 +1,14 @@
-package driver
+package construction
 
 import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting/adapter"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/application"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/driver"
 	"log"
 	"os"
 )
 
-var Store = NewMongoStore()
+var Store = driver.NewMongoStore()
 
 var Interactor = application.Interactor{
 	MeetingStore: Store,

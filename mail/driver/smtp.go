@@ -1,6 +1,7 @@
-package mail
+package driver
 
 import (
+	"github.com/WeisswurstSystems/WWM-BB/mail"
 	"log"
 	"net/smtp"
 	"os"
@@ -19,11 +20,11 @@ type emailUser struct {
 	port       int
 }
 
-func NewSMTPService() Service {
+func NewSMTPService() mail.Service {
 	var service smtpService
 	port, err := strconv.Atoi(os.Getenv("mail.port"))
 	if err != nil {
-		log.Printf("%v mail.port must be a number", LOG_TAG)
+		log.Printf("%v mail.port must be a number", mail.LOG_TAG)
 	}
 	service.user = emailUser{
 		username:   os.Getenv("mail.username"),
@@ -35,20 +36,20 @@ func NewSMTPService() Service {
 		service.user.username,
 		service.user.password,
 		service.user.smtpServer)
-	log.Printf("%v Setup Mail-Client for User %v on Server %v", LOG_TAG, service.user.username, service.user.username)
+	log.Printf("%v Setup Mail-Client for User %v on Server %v", mail.LOG_TAG, service.user.username, service.user.username)
 
 	return &service
 }
 
-func (service *smtpService) Send(mail Mail) error {
+func (service *smtpService) Send(m mail.Mail) error {
 	address := service.user.smtpServer + ":" + strconv.Itoa(service.user.port)
 	err := smtp.SendMail(address,
 		service.auth,
 		"Weisswurst Systems",
-		mail.Receivers,
-		mail.Content)
+		m.Receivers,
+		m.Content)
 	if err != nil {
-		log.Printf("%v Error sending mail: %v ", LOG_TAG, err)
+		log.Printf("%v Error sending mail: %v ", mail.LOG_TAG, err)
 		return err
 	}
 	return nil

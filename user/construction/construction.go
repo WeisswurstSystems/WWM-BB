@@ -1,13 +1,14 @@
-package driver
+package construction
 
 import (
-	mail "github.com/WeisswurstSystems/WWM-BB/mail/driver"
+	mail "github.com/WeisswurstSystems/WWM-BB/mail/construction"
 
 	"github.com/WeisswurstSystems/WWM-BB/user/adapter"
 	"github.com/WeisswurstSystems/WWM-BB/user/application"
+	"github.com/WeisswurstSystems/WWM-BB/user/driver"
 )
 
-var Store = NewMongoStore()
+var Store = driver.NewMongoStore()
 
 var Interactor = application.Interactor{
 	UserStore:   Store,
