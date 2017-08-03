@@ -28,5 +28,9 @@ func DecodeBody(body io.Reader, v interface{}) error {
 	if body == nil {
 		return ErrNoBody
 	}
-	return json.NewDecoder(body).Decode(&v)
+	err := json.NewDecoder(body).Decode(&v)
+	if err == io.EOF {
+		return ErrNoBody
+	}
+	return err
 }
