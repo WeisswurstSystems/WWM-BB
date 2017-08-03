@@ -1,50 +1,30 @@
 package adapter
 
 import (
-	"encoding/json"
 	"github.com/WeisswurstSystems/WWM-BB/user/application"
+	"github.com/WeisswurstSystems/WWM-BB/wwm"
 	"net/http"
 )
 
-func (ch *CommandHandler) Register(w http.ResponseWriter, req *http.Request) {
-	if req.Body == nil {
-		http.Error(w, "Please send a request body", http.StatusBadRequest)
-		return
-	}
-
+func (ch *CommandHandler) Register(w http.ResponseWriter, req *http.Request) error {
 	var e application.Register
-	err := json.NewDecoder(req.Body).Decode(&e)
+	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
-
-	if err = ch.UserInteractor.Register(e); err != nil {
-		if ee, ok := err.(*application.Error); ok {
-			http.Error(w, ee.Message, ee.Code)
-		} else {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-		return
-	}
-	w.WriteHeader(http.StatusCreated)
+	return ch.UserInteractor.Register(e)
 }
 
-func (ch *CommandHandler) Activate(w http.ResponseWriter, req *http.Request) {
-	if req.Body == nil {
-		http.Error(w, "Please send a request body", http.StatusBadRequest)
-		return
+func (ch *CommandHandler) Activate(w http.ResponseWriter, req *http.Request) error {
+	var e application.Register
+	err := wwm.DecodeBody(req.Body, &e)
+	if err != nil {
+		return err
 	}
-	var e application.Activate
-	err := json.NewDecoder(req.Body).Decode(&e)
-
-	if err = ch.UserInteractor.Activate(e); err != nil {
-		if ee, ok := err.(*application.Error); ok {
-			http.Error(w, ee.Message, ee.Code)
-		} else {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-		return
+	err = ch.UserInteractor.Register(e)
+	if err != nil {
+		return err
 	}
 	http.Redirect(w, req, "http://www.google.com", 301)
+	return nil
 }

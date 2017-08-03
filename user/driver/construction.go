@@ -1,7 +1,7 @@
 package driver
 
 import (
-	mailsetup "github.com/WeisswurstSystems/WWM-BB/mail/setup"
+	mail "github.com/WeisswurstSystems/WWM-BB/mail/driver"
 
 	"github.com/WeisswurstSystems/WWM-BB/user/adapter"
 	"github.com/WeisswurstSystems/WWM-BB/user/application"
@@ -11,13 +11,12 @@ var Store = NewMongoStore()
 
 var Interactor = application.Interactor{
 	UserStore:   Store,
-	MailService: mailsetup.MailService,
+	MailService: mail.MailService,
 }
 
 var Command = adapter.CommandHandler{
-	UserInteractor: Interactor,
+	UserInteractor: &Interactor,
 }
-
 var Query = adapter.QueryHandler{
 	UserStore: Store,
 }

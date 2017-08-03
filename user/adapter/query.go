@@ -5,19 +5,14 @@ import (
 	"net/http"
 )
 
-func (ch *QueryHandler) Read(w http.ResponseWriter, req *http.Request) {
+func (ch *QueryHandler) FindAll(w http.ResponseWriter, req *http.Request) error {
 	results, err := ch.UserStore.FindAll()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 
-	err = json.NewEncoder(w).Encode(results)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	return json.NewEncoder(w).Encode(results)
 }

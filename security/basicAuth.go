@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"errors"
-	meetingStore "github.com/WeisswurstSystems/WWM-BB/meeting/store"
+	meetingStore "github.com/WeisswurstSystems/WWM-BB/meeting/driver"
 	userStore "github.com/WeisswurstSystems/WWM-BB/user/store"
 	"github.com/WeisswurstSystems/WWM-BB/util"
 	"github.com/gorilla/mux"

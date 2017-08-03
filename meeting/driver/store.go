@@ -1,4 +1,4 @@
-package store
+package driver
 
 import (
 	"github.com/WeisswurstSystems/WWM-BB/database"
@@ -26,7 +26,7 @@ func (store *mongoStore) Count() (int, error) {
 	return store.meetings.Find(nil).Count()
 }
 
-func (store *mongoStore) Has(id string) (bool, error) {
+func (store *mongoStore) Has(id meeting.MeetingID) (bool, error) {
 	count, err := store.meetings.Find(bson.M{"id": id}).Count()
 	return count != 0, err
 }
@@ -43,9 +43,12 @@ func (store *mongoStore) FindAllReduced() ([]meeting.ReducedMeeting, error) {
 	return results, err
 }
 
-func (store *mongoStore) FindOne(id string) (meeting.Meeting, error) {
+func (store *mongoStore) FindOne(id meeting.MeetingID) (meeting.Meeting, error) {
 	var result meeting.Meeting
 	err := store.meetings.Find(bson.M{"id": id}).One(&result)
+	if err == mgo.ErrNotFound {
+		return result, meeting.ErrMeetingNotFound
+	}
 	return result, err
 }
 

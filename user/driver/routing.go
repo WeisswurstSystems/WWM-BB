@@ -1,11 +1,14 @@
 package driver
 
-import "github.com/gorilla/mux"
+import (
+	"github.com/WeisswurstSystems/WWM-BB/wwm"
+	"github.com/gorilla/mux"
+)
 
 func AddUserRoutes(r *mux.Router) {
-	r.HandleFunc("/", Middleware.Authenticated(Query.Read)).Methods("GET")
+	r.Handle("/", Middleware.Authenticated(wwm.Handler(Query.FindAll))).Methods("GET")
 
 	do := r.PathPrefix("/do").Subrouter()
-	do.HandleFunc("/register", Command.Register).Methods("POST")
-	do.HandleFunc("/activate", Command.Activate).Methods("POST")
+	do.Handle("/register", wwm.Handler(Command.Register)).Methods("POST")
+	do.Handle("/activate", wwm.Handler(Command.Activate)).Methods("POST")
 }

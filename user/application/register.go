@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/WeisswurstSystems/WWM-BB/mail"
 	"github.com/WeisswurstSystems/WWM-BB/user"
-	"github.com/WeisswurstSystems/WWM-BB/user/event"
 	"github.com/WeisswurstSystems/WWM-BB/util"
 	"net/http"
 )
