@@ -6,8 +6,6 @@ before_install:
   - go get github.com/mattn/goveralls
 script:
   - $HOME/gopath/bin/goveralls -service=travis-ci
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
 before_deploy:
 - export PATH=$PATH:$HOME/gopath/bin
 - go get github.com/tools/godep
