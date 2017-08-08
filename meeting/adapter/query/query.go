@@ -1,4 +1,4 @@
-package adapter
+package query
 
 import (
 	"encoding/json"
@@ -7,6 +7,10 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 )
+
+type QueryHandler struct {
+	MeetingStore meeting.ReadStore
+}
 
 func (ch *QueryHandler) FindAll(w http.ResponseWriter, req *http.Request) error {
 	results, err := ch.MeetingStore.FindAll()

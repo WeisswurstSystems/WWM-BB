@@ -9,12 +9,23 @@ type User struct {
 	MailEnabled    bool           `json:"mailEnabled"`
 }
 
-type Store interface {
-	HasByMail(mail string) (bool, error)
-	Save(User) error
+type ReadStore interface {
 	FindByMail(string) (User, error)
 	FindAll() ([]User, error)
 	FindByRegistrationID(registrationID string) (User, error)
+}
+
+type WriteStore interface {
+	Save(User) error
+}
+
+type Store interface {
+	ReadStore
+	WriteStore
+}
+
+type Authentication interface {
+	CurrentUser() User
 }
 
 func (user User) Authenticate(password string) bool {

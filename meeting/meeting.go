@@ -38,15 +38,30 @@ func (m Meeting) Reduced() ReducedMeeting {
 	}
 }
 
-type Store interface {
-	Count() (int, error)
-	Has(id MeetingID) (bool, error)
+func AllReduced(meetings []Meeting) []ReducedMeeting {
+	list := make([]ReducedMeeting, 0, len(meetings))
+	for _, v := range meetings {
+		list = append(list, v.Reduced())
+	}
+	return list
+}
+
+type ReadStore interface {
 	FindAll() ([]Meeting, error)
 	FindAllReduced() ([]ReducedMeeting, error)
 	FindOne(id MeetingID) (Meeting, error)
+}
+
+type Store interface {
+	ReadStore
+	WriteStore
+}
+
+type WriteStore interface {
 	Save(meeting Meeting) error
 }
 
 var (
 	ErrMeetingNotFound = wwm.Error{Code: http.StatusNotFound, Message: "The meeting does not exist"}
+	ErrNotAllowed      = wwm.Error{Code: http.StatusUnauthorized, Message: "Not allowed on this meeting"}
 )

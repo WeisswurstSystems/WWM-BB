@@ -33,11 +33,11 @@ func (m *memoryStore) FindAll() ([]meeting.Meeting, error) {
 }
 
 func (m *memoryStore) FindAllReduced() ([]meeting.ReducedMeeting, error) {
-	meetings := make([]meeting.ReducedMeeting, 0, len(m.list))
-	for _, v := range m.list {
-		meetings = append(meetings, v.Reduced())
+	meetings, err := m.FindAll()
+	if err != nil {
+		return []meeting.ReducedMeeting{}, err
 	}
-	return meetings, nil
+	return meeting.AllReduced(meetings), nil
 }
 
 func (m *memoryStore) FindOne(id meeting.MeetingID) (meeting.Meeting, error) {

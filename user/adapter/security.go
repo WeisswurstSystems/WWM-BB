@@ -33,9 +33,30 @@ func (ch *MiddlewareHandler) Identity(r *http.Request) (user.User, error) {
 	return u, nil
 }
 
-func (ch *MiddlewareHandler) Authenticated(next http.Handler) http.HandlerFunc {
+func (ch *MiddlewareHandler) WithRoles(roles []string, next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		u, err := ch.Identity(r)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		has := make(map[string]bool)
+		for _, role := range u.Roles {
+			has[role] = true
+		}
+		for _, role := range roles {
+			_, ok := has[role]
+			if !ok {
+				http.Error(w, err.Error(), http.StatusUnauthorized)
+			}
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
+func (ch *MiddlewareHandler) Authenticated(next http.Handler) http.Handler {
 	LOG_TAG := "[Authenticated]"
-	return func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		u, err := ch.Identity(r)
 
 		switch err {
@@ -56,5 +77,5 @@ func (ch *MiddlewareHandler) Authenticated(next http.Handler) http.HandlerFunc {
 		log.Printf("%v User %v authorized for request to %v.", LOG_TAG, u.Mail, r.URL)
 		next.ServeHTTP(w, r)
 		return
-	}
+	})
 }
