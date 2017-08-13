@@ -10,7 +10,7 @@ func TestCloseMeeting(t *testing.T) {
 	u, mock := NewMocking()
 	mock.Meeting.ID = "1"
 
-	err := u.CloseMeeting(Request{"1"})
+	err := u.CloseMeeting(Request{"1", user.Login{}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,11 +30,11 @@ func TestIsAllowed(t *testing.T) {
 			meeting.Meeting{},
 			true,
 		}, {
-			user.User{Mail: "test@mail.com"},
+			user.User{Login: user.Login{Mail: "test@mail.com"}},
 			meeting.Meeting{Creator: "test@mail.com"},
 			true,
 		}, {
-			user.User{Mail: "test@mail.com"},
+			user.User{Login: user.Login{Mail: "test@mail.com"}},
 			meeting.Meeting{},
 			false,
 		},

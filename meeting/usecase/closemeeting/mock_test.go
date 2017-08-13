@@ -11,18 +11,16 @@ type Mock struct {
 	Saved   meeting.Meeting
 }
 
+func (mock Mock) Authenticate(l user.Login) (user.User, error) {
+	return user.User{Login: l, Roles: []string{"admin"}}, nil
+}
+
 func NewMocking() (CloseMeetingUseCase, *Mock) {
 	mock := new(Mock)
 	return Interactor{
-		Store:          mock,
-		Authentication: mock,
+		Store:               mock,
+		AuthenticateUseCase: mock,
 	}, mock
-}
-
-func (mock *Mock) CurrentUser() user.User {
-	return user.User{
-		Roles: []string{"admin"},
-	}
 }
 
 func (Mock) FindAll() ([]meeting.Meeting, error) {

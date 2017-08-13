@@ -7,7 +7,6 @@ import (
 	"time"
 )
 
-
 type CreateMeetingUseCase interface {
 	CreateMeeting(request Request) error
 }

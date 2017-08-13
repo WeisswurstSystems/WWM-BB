@@ -1,8 +1,16 @@
 package user
 
+import (
+	"github.com/WeisswurstSystems/WWM-BB/wwm"
+	"net/http"
+)
+
+type Login struct {
+	Mail     string `json:"mail"`
+	Password string `json:"-"`
+}
 type User struct {
-	Mail           string         `json:"mail"`
-	Password       string         `json:"-"`
+	Login
 	RegistrationID string         `json:"-"`
 	Roles          []string       `json:"roles"`
 	DefaultOrders  map[string]int `json:"defaultOrders"`
@@ -14,7 +22,6 @@ type ReadStore interface {
 	FindAll() ([]User, error)
 	FindByRegistrationID(registrationID string) (User, error)
 }
-
 type WriteStore interface {
 	Save(User) error
 }
@@ -24,14 +31,10 @@ type Store interface {
 	WriteStore
 }
 
-type Authentication interface {
-	CurrentUser() User
-}
-
-func (user User) Authenticate(password string) bool {
-	return user.RegistrationID == "" && password == user.Password
-}
+var (
+	ErrNotFound = wwm.Error{"User does not exist", http.StatusNotFound}
+)
 
 func (user User) IsRegistered() bool {
-	return user.RegistrationID != ""
+	return user.RegistrationID == ""
 }

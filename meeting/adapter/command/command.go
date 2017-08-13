@@ -26,6 +26,7 @@ type CommandHandler struct {
 
 func (ch *CommandHandler) CloseMeeting(w http.ResponseWriter, req *http.Request) error {
 	var e closemeeting.Request
+	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
 		return err
@@ -44,6 +45,7 @@ func (ch *CommandHandler) CreateMeeting(w http.ResponseWriter, req *http.Request
 
 func (ch *CommandHandler) PutProduct(w http.ResponseWriter, req *http.Request) error {
 	var e putproduct.Request
+	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
 		return err
@@ -53,6 +55,7 @@ func (ch *CommandHandler) PutProduct(w http.ResponseWriter, req *http.Request) e
 
 func (ch *CommandHandler) RemoveProduct(w http.ResponseWriter, req *http.Request) error {
 	var e removeproduct.Request
+	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
 		return err
@@ -62,6 +65,7 @@ func (ch *CommandHandler) RemoveProduct(w http.ResponseWriter, req *http.Request
 
 func (ch *CommandHandler) SetBuyer(w http.ResponseWriter, req *http.Request) error {
 	var e setbuyer.Request
+	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
 		return err
@@ -71,6 +75,7 @@ func (ch *CommandHandler) SetBuyer(w http.ResponseWriter, req *http.Request) err
 
 func (ch *CommandHandler) SetPlace(w http.ResponseWriter, req *http.Request) error {
 	var e setplace.Request
+	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
 		return err

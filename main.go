@@ -1,9 +1,7 @@
 package main
 
 import (
-	meeting "github.com/WeisswurstSystems/WWM-BB/meeting/construction"
-	user "github.com/WeisswurstSystems/WWM-BB/user/construction"
-
+	"github.com/WeisswurstSystems/WWM-BB/wwm/construction"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -14,10 +12,10 @@ func main() {
 	router := mux.NewRouter()
 
 	userRouter := router.PathPrefix("/users").Subrouter()
-	user.AddUserRoutes(userRouter)
+	construction.AddUserRoutes(userRouter)
 
 	meetingRouter := router.PathPrefix("/meetings").Subrouter()
-	meeting.AddMeetingRoutes(meetingRouter)
+	construction.AddMeetingRoutes(meetingRouter)
 
 	// Let's go!
 	port := os.Getenv("PORT")

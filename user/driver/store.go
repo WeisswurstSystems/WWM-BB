@@ -22,20 +22,21 @@ func NewMongoStore() user.Store {
 	return &store
 }
 
-func (s *mongoStore) HasByMail(email string) (bool, error) {
-	count, err := s.users.Find(bson.M{"mail": email}).Count()
-	return count != 0, err
-}
-
 func (s *mongoStore) FindByMail(email string) (user.User, error) {
 	var findByUserMail user.User
 	err := s.users.Find(bson.M{"mail": email}).One(&findByUserMail)
+	if err == mgo.ErrNotFound {
+		return user.User{}, user.ErrNotFound
+	}
 	return findByUserMail, err
 }
 
 func (s *mongoStore) FindByRegistrationID(id string) (user.User, error) {
 	var findByRegId user.User
 	err := s.users.Find(bson.M{"registrationid": id}).One(&findByRegId)
+	if err == mgo.ErrNotFound {
+		return user.User{}, user.ErrNotFound
+	}
 	return findByRegId, err
 }
 
@@ -56,8 +57,4 @@ func (s *mongoStore) FindAllUnregistered() ([]user.User, error) {
 func (s *mongoStore) Save(user user.User) error {
 	err := s.users.Insert(&user)
 	return err
-}
-
-func (s *mongoStore) Update(user user.User) error {
-	return s.users.Update(bson.M{"mail": user.Mail}, user)
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func AddUserRoutes(r *mux.Router) {
-	r.Handle("/", UserMiddleware.Authenticated(wwm.Handler(UserQuery.FindAll))).Methods("GET")
+	r.Handle("/", wwm.Handler(UserQuery.FindAll)).Methods("GET")
 
 	do := r.PathPrefix("/do").Subrouter()
 	do.Handle("/register", wwm.Handler(UserCommand.Register)).Methods("POST")
