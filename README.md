@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/WeisswurstSystems/WWM-BB.svg?branch=master)](https://travis-ci.org/WeisswurstSystems/WWM-BB)
 
+[![Coverage Status](https://coveralls.io/repos/github/WeisswurstSystems/WWM-BB/badge.svg?branch=master)](https://coveralls.io/github/WeisswurstSystems/WWM-BB?branch=master)
+
 # Endpunkte
 
 ```
