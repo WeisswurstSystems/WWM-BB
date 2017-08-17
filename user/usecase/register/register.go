@@ -39,8 +39,7 @@ func (i Interactor) Register(req Request) error {
 	}
 
 	m := mail.NewRegistrationMail(u.RegistrationID, u.Mail)
-	i.MailService.Send(m)
-	return nil
+	return i.MailService.Send(m)
 }
 
 func (interactor *Interactor) isFree(mail string) error {

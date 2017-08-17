@@ -18,8 +18,8 @@ type Interactor struct {
 }
 
 type Request struct {
-	meeting.MeetingID
-	user.Login
+	meeting.MeetingID `json:"meetingID"`
+	Login             user.Login `json:"login"`
 }
 
 func (i Interactor) CloseMeeting(req Request) error {

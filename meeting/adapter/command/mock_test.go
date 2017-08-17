@@ -29,24 +29,30 @@ func NewMockCommandHandler() (CommandHandler, *Mock) {
 
 func (mock *Mock) CloseMeeting(request closemeeting.Request) error {
 	mock.Requests.CloseMeeting = request
+	return nil
 }
 
 func (mock *Mock) CreateMeeting(request createmeeting.Request) error {
 	mock.Requests.CreateMeeting = request
+	return nil
 }
 
 func (mock *Mock) PutProduct(request putproduct.Request) error {
 	mock.Requests.PutProduct = request
+	return nil
 }
 
 func (mock *Mock) RemoveProduct(request removeproduct.Request) error {
 	mock.Requests.RemoveProduct = request
+	return nil
 }
 
 func (mock *Mock) SetBuyer(request setbuyer.Request) error {
 	mock.Requests.SetBuyer = request
+	return nil
 }
 
 func (mock *Mock) SetPlace(request setplace.Request) error {
 	mock.Requests.SetPlace = request
+	return nil
 }

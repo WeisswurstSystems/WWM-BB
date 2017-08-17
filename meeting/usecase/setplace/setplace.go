@@ -18,9 +18,9 @@ type Interactor struct {
 }
 
 type Request struct {
-	Place string
-	meeting.MeetingID
-	user.Login
+	Place             string `json:"place"`
+	meeting.MeetingID `json:"meetingID"`
+	user.Login        `json:"login"`
 }
 
 func (i Interactor) SetPlace(req Request) error {

@@ -4,7 +4,6 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase"
 	"github.com/WeisswurstSystems/WWM-BB/util"
-	"time"
 )
 
 type CreateMeetingUseCase interface {
@@ -16,17 +15,12 @@ type Interactor struct {
 }
 
 type Request struct {
-	Place   string
-	Date    time.Time
-	Creator string
+	Meeting meeting.Meeting `json:"meeting"`
 }
 
 func (i Interactor) CreateMeeting(req Request) error {
-	var m meeting.Meeting
+	m := req.Meeting
 
-	m.Creator = req.Creator
-	m.Date = req.Date
-	m.Place = req.Place
 	m.ID = meeting.MeetingID(util.GetUID(12))
 
 	err := i.Save(m)

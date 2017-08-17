@@ -18,12 +18,13 @@ type Interactor struct {
 }
 
 type Request struct {
-	meeting.Product
-	meeting.MeetingID
-	user.Login
+	meeting.MeetingID `json:"meetingID"`
+	Product           meeting.Product `json:"product"`
+	Login             user.Login      `json:"login"`
 }
 
 func (i Interactor) PutProduct(req Request) error {
+
 	m, err := i.FindOne(req.MeetingID)
 	if err != nil {
 		return err

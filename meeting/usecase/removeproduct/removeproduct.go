@@ -4,8 +4,8 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase"
 	"github.com/WeisswurstSystems/WWM-BB/user"
-	"github.com/WeisswurstSystems/WWM-BB/util"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
+	"github.com/WeisswurstSystems/WWM-BB/util"
 )
 
 type RemoveProductUseCase interface {
@@ -18,9 +18,9 @@ type Interactor struct {
 }
 
 type Request struct {
-	meeting.ProductName
-	meeting.MeetingID
-	user.Login
+	meeting.ProductName `json:"productName"`
+	meeting.MeetingID   `json:"meetingID"`
+	Login               user.Login `json:"login"`
 }
 
 func (i Interactor) RemoveProduct(req Request) error {
@@ -32,7 +32,6 @@ func (i Interactor) RemoveProduct(req Request) error {
 	if err != nil {
 		return err
 	}
-
 
 	if !isAllowed(user, m) {
 		return meeting.ErrNotAllowed

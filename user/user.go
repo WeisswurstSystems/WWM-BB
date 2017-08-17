@@ -7,11 +7,11 @@ import (
 
 type Login struct {
 	Mail     string `json:"mail"`
-	Password string `json:"-"`
+	Password string `json:"password"`
 }
 type User struct {
-	Login
-	RegistrationID string         `json:"-"`
+	Login          `json:"login"`
+	RegistrationID string         `json:"registrationID"`
 	Roles          []string       `json:"roles"`
 	DefaultOrders  map[string]int `json:"defaultOrders"`
 	MailEnabled    bool           `json:"mailEnabled"`

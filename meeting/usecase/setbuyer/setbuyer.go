@@ -17,9 +17,9 @@ type Interactor struct {
 	authenticate.AuthenticateUseCase
 }
 type Request struct {
-	Buyer string
-	meeting.MeetingID
-	user.Login
+	Buyer             string `json:"buyer"`
+	meeting.MeetingID `json:"meetingID"`
+	user.Login        `json:"login"`
 }
 
 func (i Interactor) SetBuyer(req Request) error {
