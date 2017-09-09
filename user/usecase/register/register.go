@@ -18,10 +18,9 @@ type Interactor struct {
 }
 
 type Request struct {
-	Mail        string      `json:"mail"`
-	Password    string      `json:"password"`
-	PayPal      user.PayPal `json:"payPal"`
-	MailEnabled bool        `json:"mailEnabled"`
+	Mail        string `json:"mail"`
+	Password    string `json:"password"`
+	MailEnabled bool   `json:"mailEnabled"`
 }
 
 func (i Interactor) Register(req Request) error {
@@ -56,7 +55,6 @@ func buildUser(req Request) user.User {
 	uid := util.GetUID(60)
 	return user.User{
 		Login:          user.Login{req.Mail, req.Password},
-		PayPal:         req.PayPal,
 		RegistrationID: uid,
 		Roles:          []string{"user"},
 		MailEnabled:    req.MailEnabled,
