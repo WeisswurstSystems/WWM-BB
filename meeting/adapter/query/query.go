@@ -18,10 +18,12 @@ func (ch *QueryHandler) FindAll(w http.ResponseWriter, req *http.Request) error 
 		return err
 	}
 
+	reduced := meeting.AllReduced(results)
+
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 
-	return json.NewEncoder(w).Encode(results)
+	return json.NewEncoder(w).Encode(reduced)
 }
 
 func (ch *QueryHandler) FindByID(w http.ResponseWriter, req *http.Request) error {
