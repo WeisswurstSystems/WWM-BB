@@ -11,4 +11,5 @@ func AddUserRoutes(r *mux.Router) {
 	do := r.PathPrefix("/do").Subrouter()
 	do.Handle("/register", wwm.Handler(UserCommand.Register)).Methods("POST")
 	do.Handle("/activate", wwm.Handler(UserCommand.Activate)).Methods("POST")
+	do.Handle("/setUpPayPal", wwm.Handler(UserCommand.SetUpPayPal)).Methods("POST")
 }

@@ -11,6 +11,7 @@ type Login struct {
 }
 type User struct {
 	Login          `json:"login"`
+	PayPal         PayPal         `json:"payPal"`
 	RegistrationID string         `json:"registrationID"`
 	Roles          []string       `json:"roles"`
 	DefaultOrders  map[string]int `json:"defaultOrders"`

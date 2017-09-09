@@ -3,6 +3,7 @@ package command
 import (
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/activate"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/register"
+	"github.com/WeisswurstSystems/WWM-BB/user/usecase/setUpPayPal"
 	"github.com/WeisswurstSystems/WWM-BB/wwm"
 	"net/http"
 )
@@ -10,6 +11,7 @@ import (
 type Interactor interface {
 	register.RegisterUseCase
 	activate.ActivateUseCase
+	setUpPayPal.SetUpPayPalUseCase
 }
 
 type CommandHandler struct {
@@ -23,6 +25,15 @@ func (ch *CommandHandler) Register(w http.ResponseWriter, req *http.Request) err
 		return err
 	}
 	return ch.Interactor.Register(e)
+}
+
+func (ch *CommandHandler) SetUpPayPal(w http.ResponseWriter, req *http.Request) error {
+	var e setUpPayPal.Request
+	err := wwm.DecodeBody(req.Body, &e)
+	if err != nil {
+		return err
+	}
+	return ch.Interactor.SetUpPayPal(e)
 }
 
 func (ch *CommandHandler) Activate(w http.ResponseWriter, req *http.Request) error {
