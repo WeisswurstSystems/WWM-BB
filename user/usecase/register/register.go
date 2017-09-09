@@ -20,6 +20,7 @@ type Interactor struct {
 type Request struct {
 	Mail        string `json:"mail"`
 	Password    string `json:"password"`
+	PaypalLink	string `json:"paypalLink"`
 	MailEnabled bool   `json:"mailEnabled"`
 }
 
@@ -55,6 +56,7 @@ func buildUser(req Request) user.User {
 	uid := util.GetUID(60)
 	return user.User{
 		Login:          user.Login{req.Mail, req.Password},
+		PaypalLink:		req.PaypalLink,
 		RegistrationID: uid,
 		Roles:          []string{"user"},
 		MailEnabled:    req.MailEnabled,

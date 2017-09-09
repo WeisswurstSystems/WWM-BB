@@ -1,13 +1,13 @@
-# Kurzbeschreibung der Änderungen
+## Kurzbeschreibung der Änderungen
 
 //TODO
 
-# Bestätigung:
+## Bestätigung:
 
 - [ ] @peter-mueller 
 - [ ] @FabianWilms 
 
-# Referenzen
+## Referenzen
 
 closes #
 dependes on #
