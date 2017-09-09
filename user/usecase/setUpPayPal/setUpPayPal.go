@@ -7,7 +7,7 @@ import (
 )
 
 type SetUpPayPalUseCase interface {
-	Register(Request) error
+	SetUpPayPal(Request) error
 }
 type Interactor struct {
 	user.Store
@@ -27,7 +27,7 @@ func (i Interactor) SetUpPayPal(req Request) error {
 
 	u.PayPal = req.PayPal
 
-	err = i.Save(user)
+	err = i.Save(u)
 	if err != nil {
 		return err
 	}

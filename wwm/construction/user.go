@@ -8,6 +8,7 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/activate"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/register"
+	"github.com/WeisswurstSystems/WWM-BB/user/usecase/setUpPayPal"
 )
 
 var UserStore = driver.NewMongoStore()
@@ -18,6 +19,7 @@ var UserUseCases = struct {
 	authenticate.AuthenticateUseCase
 	activate.ActivateUseCase
 	register.RegisterUseCase
+	setUpPayPal.SetUpPayPalUseCase
 }{
 	AuthenticateUseCase: authenticate.Interactor{
 		ReadStore: UserStore,
