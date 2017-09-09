@@ -1,12 +1,12 @@
 package mail
 
 import (
-	"text/template"
 	"bytes"
+	"text/template"
 )
 
-type registrationData struct{
-	Usermail string
+type registrationData struct {
+	Usermail       string
 	RegistrationID string
 }
 
@@ -22,14 +22,28 @@ http://wwm-bb.herokuapp.com/users/register/{{.RegistrationID}}
 Viel Spaß beim bestellen!
 `
 
-func SendRegistrationMail(registrationId string, usermail string) {
+var registrationTemplate = template.New("registration")
+
+func init() {
+	_, err := registrationTemplate.Parse(messageTemplate)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func NewRegistrationMail(registrationId string, usermail string) (mail Mail) {
 	data := registrationData{Usermail: usermail, RegistrationID: registrationId}
-	tmpl, err := template.New("test").Parse(messageTemplate)
-	if err != nil { panic(err) }
 
 	var message bytes.Buffer
-	err = tmpl.Execute(&message, data)
-	if err != nil { panic(err) }
+	err := registrationTemplate.Execute(&message, data)
+	if err != nil {
+		panic(err)
+	}
 
-	SendMail(topic, message.String(), []string{usermail})
+	mail.Content, err = NewContent(topic, message.String())
+	if err != nil {
+		panic(err)
+	}
+	mail.Receivers = []string{usermail}
+	return mail
 }
