@@ -6,6 +6,7 @@ import (
 	"github.com/go-errors/errors"
 	"github.com/gorilla/mux"
 	"net/http"
+	"github.com/WeisswurstSystems/WWM-BB/wwm/construction"
 )
 
 type QueryHandler struct {
@@ -32,13 +33,21 @@ func (ch *QueryHandler) FindByID(w http.ResponseWriter, req *http.Request) error
 		return errors.New("meeting id url parameter missing")
 	}
 
-	results, err := ch.MeetingStore.FindOne(meeting.MeetingID(id))
+	result, err := ch.MeetingStore.FindOne(meeting.MeetingID(id))
 	if err != nil {
 		return err
 	}
 
+	creatorUser, err := construction.UserQuery.FindByMail(result.Creator)
+
+	if (err != nil) {
+		errors.New("Creator wurde nicht in Nutzer-DB gefunden")
+	}
+
+	detailedResult := meeting.ToDetailedMeeting(result, creatorUser.PayPal.MeLink)
+
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 
-	return json.NewEncoder(w).Encode(results)
+	return json.NewEncoder(w).Encode(detailedResult)
 }

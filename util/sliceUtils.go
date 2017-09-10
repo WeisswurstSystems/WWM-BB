@@ -9,7 +9,7 @@ func Contains(s []string, e string) bool {
 	return false
 }
 
-func SliceIndex(limit int, predicate func(i int) bool) int {
+func IndexOf(limit int, predicate func(i int) bool) int {
 	for i := 0; i < limit; i++ {
 		if predicate(i) {
 			return i
