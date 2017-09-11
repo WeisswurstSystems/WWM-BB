@@ -96,6 +96,8 @@ func ToDetailedMeeting(m Meeting, paypalLink string) DetailedMeeting {
 
 	detailedMeeting.TotalPrice = totalPrice
 	detailedMeeting.TotalItems = totalItems
+
+	return detailedMeeting
 }
 
 type ReadStore interface {

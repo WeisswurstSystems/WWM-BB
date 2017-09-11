@@ -33,6 +33,8 @@ var MeetingUseCases = struct {
 var MeetingCommand = command.CommandHandler{
 	Interactor: &MeetingUseCases,
 }
+
 var MeetingQuery = query.QueryHandler{
 	MeetingStore: MeetingStore,
+	UserStore: UserStore,
 }

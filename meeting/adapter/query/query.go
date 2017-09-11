@@ -6,11 +6,12 @@ import (
 	"github.com/go-errors/errors"
 	"github.com/gorilla/mux"
 	"net/http"
-	"github.com/WeisswurstSystems/WWM-BB/wwm/construction"
+	"github.com/WeisswurstSystems/WWM-BB/user"
 )
 
 type QueryHandler struct {
 	MeetingStore meeting.ReadStore
+	UserStore user.ReadStore
 }
 
 func (ch *QueryHandler) FindAll(w http.ResponseWriter, req *http.Request) error {
@@ -38,7 +39,7 @@ func (ch *QueryHandler) FindByID(w http.ResponseWriter, req *http.Request) error
 		return err
 	}
 
-	creatorUser, err := construction.UserQuery.FindByMail(result.Creator)
+	creatorUser, err := ch.UserStore.FindByMail(result.Creator)
 
 	if (err != nil) {
 		errors.New("Creator wurde nicht in Nutzer-DB gefunden")
