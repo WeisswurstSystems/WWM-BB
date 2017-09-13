@@ -1,14 +1,16 @@
 ## Kurzbeschreibung der Änderungen
 
-//TODO
+//TODO Kurze Beschreibung
+
+## Checkliste
+
+- [ ] Funktionalität getestet
+- [ ] Dokumentation im Wiki ergänzt (bitte hier Änderung(en) verlinken)
 
 ## Bestätigung:
 
-- [ ] @peter-mueller 
-- [ ] @FabianWilms 
+- [ ] @
 
 ## Referenzen
 
-closes #
-dependes on #
-only after #
+closes #x
