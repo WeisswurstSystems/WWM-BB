@@ -5,7 +5,7 @@ type ProductName string
 
 type Product struct {
 	Name  ProductName `json:"name"`
-	Price float32     `json:"price"`
+	Price float64     `json:"price"`
 }
 
 func (o Offer) Put(p Product) Offer {

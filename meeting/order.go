@@ -3,6 +3,7 @@ package meeting
 import (
 	"github.com/WeisswurstSystems/WWM-BB/util"
 	"strconv"
+	"strings"
 )
 
 type OrderItem struct {
@@ -20,7 +21,7 @@ type DetailedOrder struct {
 	Customer   string      `json:"customer"`
 	Payed      bool        `json:"payed"`
 	Items      []OrderItem `json:"items"`
-	TotalPrice float32     `json:"totalPrice"`
+	TotalPrice float64     `json:"totalPrice"`
 	PayLink    string      `json:"payLink"`
 }
 
@@ -39,21 +40,25 @@ func ToDetailedOrder(order Order, products []Product, paypalLink string) Detaile
 		Items:    order.Items,
 	}
 
-	var resultPrice float32
+	var resultPrice float64
 
 	for _, item := range detailedOrder.Items {
 		price := products[
 			util.IndexOf(len(products), func(i int) bool {
 				return products[i].Name == item.ItemName
 			})].Price
-		resultPrice += resultPrice + (float32(item.Amount) * price)
+		resultPrice += (float64(item.Amount) * price)
 	}
 
-	detailedOrder.TotalPrice = resultPrice
+	detailedOrder.TotalPrice = util.FloatToFixed(resultPrice, 2)
 
 	if paypalLink != "" {
-		detailedOrder.PayLink = paypalLink + "/" + strconv.FormatFloat(float64(detailedOrder.TotalPrice), 'f', 2, 32)
+		if !strings.HasSuffix(paypalLink, "/") {
+			paypalLink += "/"
+		}
+		detailedOrder.PayLink = paypalLink +  strconv.FormatFloat(float64(detailedOrder.TotalPrice), 'f', 2, 32)
 	}
 
 	return detailedOrder
 }
+

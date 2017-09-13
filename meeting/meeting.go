@@ -31,7 +31,7 @@ type DetailedMeeting struct {
 	Closed     bool            `json:"closed"`
 	Orders     []DetailedOrder `json:"orders"`
 	Offer      Offer           `json:"offer"`
-	TotalPrice float32         `json:"totalPrice"`
+	TotalPrice float64         `json:"totalPrice"`
 	TotalItems []OrderItem     `json:"totalItems"`
 }
 
@@ -74,11 +74,11 @@ func ToDetailedMeeting(m Meeting, paypalLink string) DetailedMeeting {
 		Offer:     m.Offer,
 	}
 
-	var totalPrice float32
+	var totalPrice float64
 	var totalItems []OrderItem
 
 	for _, order := range detailedMeeting.Orders {
-		totalPrice += totalPrice + order.TotalPrice
+		totalPrice += order.TotalPrice
 		for _, item := range order.Items {
 			index := util.IndexOf(len(totalItems), func(i int) bool {
 				return totalItems[i].ItemName == item.ItemName
