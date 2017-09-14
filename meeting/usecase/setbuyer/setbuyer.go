@@ -27,12 +27,13 @@ func (i Interactor) SetBuyer(req Request) error {
 	if err != nil {
 		return err
 	}
+
 	user, err := i.AuthenticateUseCase.Authenticate(req.Login)
 	if err != nil {
 		return err
 	}
 
-	if !isAllowed(user, m) {
+	if !util.IsMeetingCreatorOrBuyer(user, m) {
 		return meeting.ErrNotAllowed
 	}
 
@@ -44,14 +45,4 @@ func (i Interactor) SetBuyer(req Request) error {
 
 	usecase.LOG.Printf("did %v", req)
 	return nil
-}
-
-func isAllowed(u user.User, m meeting.Meeting) bool {
-	if u.Mail == m.Creator {
-		return true
-	}
-	if u.Mail == m.Buyer {
-		return true
-	}
-	return util.Contains(u.Roles, "admin")
 }

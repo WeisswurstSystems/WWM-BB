@@ -33,7 +33,7 @@ func (i Interactor) SetPlace(req Request) error {
 		return err
 	}
 
-	if !isAllowed(user, m) {
+	if !util.IsMeetingCreatorOrBuyer(user, m) {
 		return meeting.ErrNotAllowed
 	}
 
@@ -45,14 +45,4 @@ func (i Interactor) SetPlace(req Request) error {
 
 	usecase.LOG.Printf("did %v", req)
 	return nil
-}
-
-func isAllowed(u user.User, m meeting.Meeting) bool {
-	if u.Mail == m.Creator {
-		return true
-	}
-	if u.Mail == m.Buyer {
-		return true
-	}
-	return util.Contains(u.Roles, "admin")
 }
