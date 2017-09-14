@@ -4,7 +4,6 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
-	"github.com/WeisswurstSystems/WWM-BB/util"
 )
 
 type SetUpPayPalUseCase interface {
