@@ -22,7 +22,7 @@ var MeetingUseCases = struct {
 	setbuyer.SetBuyerUseCase
 	setplace.SetPlaceUseCase
 }{
-	createmeeting.Interactor{MeetingStore},
+	createmeeting.Interactor{MeetingStore, UserUseCases.AuthenticateUseCase},
 	closemeeting.Interactor{MeetingStore, UserUseCases.AuthenticateUseCase},
 	putproduct.Interactor{MeetingStore, UserUseCases.AuthenticateUseCase},
 	removeproduct.Interactor{MeetingStore, UserUseCases.AuthenticateUseCase},
