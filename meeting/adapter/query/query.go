@@ -2,14 +2,17 @@ package query
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
+	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/go-errors/errors"
 	"github.com/gorilla/mux"
-	"net/http"
 )
 
 type QueryHandler struct {
 	MeetingStore meeting.ReadStore
+	UserStore    user.ReadStore
 }
 
 func (ch *QueryHandler) FindAll(w http.ResponseWriter, req *http.Request) error {
@@ -32,13 +35,21 @@ func (ch *QueryHandler) FindByID(w http.ResponseWriter, req *http.Request) error
 		return errors.New("meeting id url parameter missing")
 	}
 
-	results, err := ch.MeetingStore.FindOne(meeting.MeetingID(id))
+	result, err := ch.MeetingStore.FindOne(meeting.MeetingID(id))
 	if err != nil {
 		return err
 	}
 
+	creatorUser, err := ch.UserStore.FindByMail(result.Creator)
+
+	if err != nil {
+		errors.New("Creator wurde nicht in Nutzer-DB gefunden")
+	}
+
+	detailedResult := result.Detailed(creatorUser.PayPal.MeLink)
+
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 
-	return json.NewEncoder(w).Encode(results)
+	return json.NewEncoder(w).Encode(detailedResult)
 }

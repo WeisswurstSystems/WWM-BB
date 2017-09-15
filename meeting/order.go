@@ -1,8 +1,8 @@
 package meeting
 
 type OrderItem struct {
-	ItemName string `json:"itemName"`
-	Amount   int    `json:"amount"`
+	ItemName ProductName `json:"itemName"`
+	Amount   int         `json:"amount"`
 }
 
 type Order struct {
