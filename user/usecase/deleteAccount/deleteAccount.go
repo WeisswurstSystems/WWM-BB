@@ -19,7 +19,7 @@ type Interactor struct {
 	authenticate.AuthenticateUseCase
 }
 
-func (i *Interactor) DeleteAccount(request Request) error {
+func (i Interactor) DeleteAccount(request Request) error {
 	u, err := i.Authenticate(request.Login)
 	if err != nil {
 		return err
