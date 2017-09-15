@@ -1,8 +1,9 @@
 package user
 
 import (
-	"github.com/WeisswurstSystems/WWM-BB/wwm"
 	"net/http"
+
+	"github.com/WeisswurstSystems/WWM-BB/wwm"
 )
 
 type Login struct {
@@ -25,6 +26,7 @@ type ReadStore interface {
 }
 type WriteStore interface {
 	Save(User) error
+	RemoveByMail(string) error
 }
 
 type Store interface {

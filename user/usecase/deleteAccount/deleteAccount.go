@@ -1,4 +1,4 @@
-package changePassword
+package deleteAccount
 
 import (
 	"github.com/WeisswurstSystems/WWM-BB/user"
@@ -6,13 +6,12 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
 )
 
-type ChangePasswordUseCase interface {
-	ChangePassword(Request) error
+type DeleteAccountUseCase interface {
+	DeleteAccount(Request) error
 }
 
 type Request struct {
-	Login    user.Login `json:"login"`
-	Password string     `json:"password"`
+	Login user.Login `json:"login"`
 }
 
 type Interactor struct {
@@ -20,18 +19,17 @@ type Interactor struct {
 	authenticate.AuthenticateUseCase
 }
 
-func (i *Interactor) ChangePassword(request Request) error {
+func (i *Interactor) DeleteAccount(request Request) error {
 	u, err := i.Authenticate(request.Login)
 	if err != nil {
 		return err
 	}
 
-	u.Password = request.Password
-	err = i.Save(u)
+	err = i.RemoveByMail(u.Mail)
 	if err != nil {
 		return err
 	}
 
-	usecase.LOG.Printf("Changed password of user %v", u.Mail)
+	usecase.LOG.Printf("Deleted account of user %v", u.Mail)
 	return nil
 }
