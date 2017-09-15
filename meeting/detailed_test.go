@@ -1,10 +1,11 @@
 package meeting
 
 import (
-	"github.com/WeisswurstSystems/WWM-BB/user"
-	"testing"
-	"github.com/stretchr/testify/assert"
 	"strconv"
+	"testing"
+
+	"github.com/WeisswurstSystems/WWM-BB/user"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestToDetailedMeeting(t *testing.T) {
@@ -17,12 +18,12 @@ func TestToDetailedMeeting(t *testing.T) {
 		Product{"Weißbier", 2.50}}
 
 	testOrders := []Order{
-		{Customer:"A", Items: []OrderItem{{"Brezen", 2}, {"Weißbier", 1}}},
-		{Customer:"B", Items: []OrderItem{{"Weisswurst", 1}, {"Brezen", 1}, {"Weißbier", 0}}},
-		{Customer:"C", Items: []OrderItem{{"Weisswurst", 6}}},
-		{Customer:"D", Items: []OrderItem{{"Weißbier", 2}}},
-		{Customer:"E", Items: []OrderItem{{"Brezen", 5}}},
-		}
+		{Customer: "A", Items: []OrderItem{{"Brezen", 2}, {"Weißbier", 1}}},
+		{Customer: "B", Items: []OrderItem{{"Weisswurst", 1}, {"Brezen", 1}, {"Weißbier", 0}}},
+		{Customer: "C", Items: []OrderItem{{"Weisswurst", 6}}},
+		{Customer: "D", Items: []OrderItem{{"Weißbier", 2}}},
+		{Customer: "E", Items: []OrderItem{{"Brezen", 5}}},
+	}
 
 	testMeeting := Meeting{
 		Creator: uLogin.Mail,
@@ -30,13 +31,13 @@ func TestToDetailedMeeting(t *testing.T) {
 		Orders:  testOrders,
 	}
 
-	resultMeeting := ToDetailedMeeting(testMeeting, testUser.PayPal.MeLink)
+	resultMeeting := testMeeting.Detailed(testUser.PayPal.MeLink)
 
 	for _, order := range resultMeeting.Orders {
 
 		if order.Customer == "A" {
-			assert.Equal(t, order.TotalPrice,5.1, "")
-			assert.Equal(t, order.PayLink, uPaypal.MeLink + strconv.FormatFloat(float64(order.TotalPrice), 'f', 2, 32))
+			assert.Equal(t, order.TotalPrice, 5.1, "")
+			assert.Equal(t, order.PayLink, uPaypal.MeLink+strconv.FormatFloat(float64(order.TotalPrice), 'f', 2, 32))
 		} else if order.Customer == "B" {
 			assert.Equal(t, order.TotalPrice, 1.95, "")
 		} else if order.Customer == "C" {
@@ -49,5 +50,5 @@ func TestToDetailedMeeting(t *testing.T) {
 			t.Fatalf("No Customer is named %v", order.Customer)
 		}
 	}
-	assert.Equal(t, resultMeeting.TotalPrice,22.45, "")
+	assert.Equal(t, resultMeeting.TotalPrice, 22.45, "")
 }
