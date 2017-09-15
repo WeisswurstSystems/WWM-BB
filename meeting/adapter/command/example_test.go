@@ -29,6 +29,10 @@ func ExampleCommandHandler_CreateMeeting() {
 	//     "closed": false,
 	//     "orders": null,
 	//     "offer": null
+	//   },
+	//   "login": {
+	//     "mail": "",
+	//     "password": ""
 	//   }
 	// }
 }

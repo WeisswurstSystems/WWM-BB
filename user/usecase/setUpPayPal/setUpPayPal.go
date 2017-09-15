@@ -31,6 +31,7 @@ func (i Interactor) SetUpPayPal(req Request) error {
 	if err != nil {
 		return err
 	}
+
 	usecase.LOG.Printf("did %v", req)
 	return nil
 }
