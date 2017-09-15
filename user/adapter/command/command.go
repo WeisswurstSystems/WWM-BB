@@ -1,17 +1,22 @@
 package command
 
 import (
+	"net/http"
+
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/activate"
+	"github.com/WeisswurstSystems/WWM-BB/user/usecase/changePassword"
+	"github.com/WeisswurstSystems/WWM-BB/user/usecase/deleteAccount"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/register"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/setUpPayPal"
 	"github.com/WeisswurstSystems/WWM-BB/wwm"
-	"net/http"
 )
 
 type Interactor interface {
 	register.RegisterUseCase
 	activate.ActivateUseCase
 	setUpPayPal.SetUpPayPalUseCase
+	changePassword.ChangePasswordUseCase
+	deleteAccount.DeleteAccountUseCase
 }
 
 type CommandHandler struct {
@@ -48,4 +53,22 @@ func (ch *CommandHandler) Activate(w http.ResponseWriter, req *http.Request) err
 	}
 	http.Redirect(w, req, "http://www.google.com", 301)
 	return nil
+}
+
+func (ch *CommandHandler) ChangePassword(w http.ResponseWriter, req *http.Request) error {
+	var e changePassword.Request
+	err := wwm.DecodeBody(req.Body, &e)
+	if err != nil {
+		return err
+	}
+	return ch.Interactor.ChangePassword(e)
+}
+
+func (ch *CommandHandler) DeleteAccount(w http.ResponseWriter, req *http.Request) error {
+	var e deleteAccount.Request
+	err := wwm.DecodeBody(req.Body, &e)
+	if err != nil {
+		return err
+	}
+	return ch.Interactor.DeleteAccount(e)
 }
