@@ -58,3 +58,8 @@ func (s *mongoStore) Save(user user.User) error {
 	err := s.users.Insert(&user)
 	return err
 }
+
+func (s *mongoStore) RemoveByMail(mail string) error {
+	err := s.users.Remove(bson.M{"mail": mail})
+	return err
+}
