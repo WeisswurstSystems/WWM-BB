@@ -5,7 +5,6 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase"
 	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
-	"github.com/WeisswurstSystems/WWM-BB/util"
 )
 
 type CloseMeetingUseCase interface {
@@ -19,7 +18,7 @@ type Interactor struct {
 
 type Request struct {
 	meeting.MeetingID `json:"meetingID"`
-	Login user.Login  `json:"login"`
+	Login             user.Login `json:"login"`
 }
 
 func (i Interactor) CloseMeeting(req Request) error {
@@ -28,12 +27,12 @@ func (i Interactor) CloseMeeting(req Request) error {
 		return err
 	}
 
-	user, err := i.AuthenticateUseCase.Authenticate(req.Login)
+	u, err := i.AuthenticateUseCase.Authenticate(req.Login)
 	if err != nil {
 		return err
 	}
 
-	if !util.IsMeetingCreator(user, m) {
+	if !u.HasMail(m.Creator) {
 		return meeting.ErrNotAllowed
 	}
 

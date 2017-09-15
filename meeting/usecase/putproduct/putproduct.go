@@ -5,7 +5,6 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase"
 	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
-	"github.com/WeisswurstSystems/WWM-BB/util"
 )
 
 type PutProductUseCase interface {
@@ -30,12 +29,12 @@ func (i Interactor) PutProduct(req Request) error {
 		return err
 	}
 
-	user, err := i.AuthenticateUseCase.Authenticate(req.Login)
+	u, err := i.AuthenticateUseCase.Authenticate(req.Login)
 	if err != nil {
 		return err
 	}
 
-	if !util.IsMeetingCreatorOrBuyer(user, m) {
+	if !u.HasMail(m.Creator, m.Buyer) {
 		return meeting.ErrNotAllowed
 	}
 
