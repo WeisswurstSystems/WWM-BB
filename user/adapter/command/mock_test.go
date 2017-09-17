@@ -18,9 +18,9 @@ type Mock struct {
 	}
 }
 
-func NewMockCommandHandler() (CommandHandler, *Mock) {
+func NewMockCommandHandler() (Handler, *Mock) {
 	mock := new(Mock)
-	return CommandHandler{
+	return Handler{
 		Interactor: mock,
 	}, mock
 }

@@ -47,7 +47,7 @@ var UserUseCases = struct {
 	},
 }
 
-var UserCommand = command.CommandHandler{
+var UserCommand = command.Handler{
 	Interactor: &UserUseCases,
 }
 var UserQuery = query.QueryHandler{
