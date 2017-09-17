@@ -9,7 +9,7 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/removeproduct"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setbuyer"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setplace"
-	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/payorder"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/toggleorderpayed"
 )
 
 func ExampleCommandHandler_CreateMeeting() {
@@ -127,18 +127,14 @@ func ExampleCommandHandler_SetPlace() {
 
 func ExampleCommandHandler_PayOrder() {
 	// Send a json Request in this form
-	var request payorder.Request
+	var request toggleorderpayed.Request
 	data, _ := json.MarshalIndent(request, "", "  ")
 	fmt.Printf("%s", data)
 
 	// Output:
 	// {
 	//   "meetingID": "",
-	//   "order": {
-	//     "customer": "",
-	//     "payed": false,
-	//     "items": null
-	//   },
+	//   "customer": "",
 	//   "login": {
 	//     "mail": "",
 	//     "password": ""

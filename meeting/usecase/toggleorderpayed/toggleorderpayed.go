@@ -1,17 +1,17 @@
-package payorder
+package toggleorderpayed
 
 import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase"
 	"github.com/WeisswurstSystems/WWM-BB/util"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
-	"github.com/WeisswurstSystems/WWM-BB/user"
 	"errors"
 	"fmt"
+	"github.com/WeisswurstSystems/WWM-BB/user"
 )
 
-type PayOrderUsecase interface {
-	PayOrder(request Request) error
+type ToggleOrderPayedUseCase interface {
+	ToggleOrderPayed(request Request) error
 }
 
 type Interactor struct {
@@ -21,11 +21,11 @@ type Interactor struct {
 
 type Request struct {
 	meeting.MeetingID `json:"meetingID"`
-	Order meeting.Order `json:"order"`
+	Customer meeting.CustomerMail `json:"customer"`
 	Login user.Login  `json:"login"`
 }
 
-func (i Interactor) PayOrder(req Request) error {
+func (i Interactor) ToggleOrderPayed(req Request) error {
 	m, err := i.FindOne(req.MeetingID)
 	if err != nil {
 		return err
@@ -41,14 +41,14 @@ func (i Interactor) PayOrder(req Request) error {
 	}
 
 	index := util.IndexOf(len(m.Orders), func(i int) bool {
-		return m.Orders[i].Customer == req.Order.Customer
+		return m.Orders[i].Customer == req.Customer
 	})
 
 	if index == -1 {
-		return errors.New(fmt.Sprintf("Order with customer %v not found in Meeting %v ", req.Order.Customer, m.ID))
+		return errors.New(fmt.Sprintf("Order with customer %v not found in Meeting %v ", req.Customer, m.ID))
 	}
 
-	m.Orders[index].Payed = true
+	m.Orders[index].Payed = !m.Orders[index].Payed
 	err = i.Save(m)
 	if err != nil {
 		return err

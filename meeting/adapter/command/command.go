@@ -9,7 +9,7 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setplace"
 	"github.com/WeisswurstSystems/WWM-BB/wwm"
 	"net/http"
-	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/payorder"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/toggleorderpayed"
 	"github.com/gorilla/mux"
 	"github.com/go-errors/errors"
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
@@ -22,7 +22,7 @@ type Interactor interface {
 	removeproduct.RemoveProductUseCase
 	setbuyer.SetBuyerUseCase
 	setplace.SetPlaceUseCase
-	payorder.PayOrderUsecase
+	toggleorderpayed.ToggleOrderPayedUseCase
 }
 
 type CommandHandler struct {
@@ -88,8 +88,8 @@ func (ch *CommandHandler) SetPlace(w http.ResponseWriter, req *http.Request) err
 	return ch.Interactor.SetPlace(e)
 }
 
-func (ch *CommandHandler) PayOrder(w http.ResponseWriter, req *http.Request) error {
-	var e payorder.Request
+func (ch *CommandHandler) ToggleOrderPayed(w http.ResponseWriter, req *http.Request) error {
+	var e toggleorderpayed.Request
 	e.Login.Mail, e.Login.Password, _  = req.BasicAuth()
 
 	id, ok := mux.Vars(req)["meetingId"]
@@ -102,5 +102,5 @@ func (ch *CommandHandler) PayOrder(w http.ResponseWriter, req *http.Request) err
 	if err != nil {
 		return err
 	}
-	return ch.Interactor.PayOrder(e)
+	return ch.Interactor.ToggleOrderPayed(e)
 }
