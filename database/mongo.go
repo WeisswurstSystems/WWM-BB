@@ -11,10 +11,10 @@ import (
 const LOG_TAG = "[DATABASE]"
 
 func NewMongoSession() *mgo.Session {
-	username := GetEnv("DB_USERNAME", "wwm")
-	password := GetEnv("DB_PASSWORD", "wwm")
-	url := GetEnv("DB_URL", "ds064649.mlab.com:64649/wwmbb-dev")
-	databaseName := GetEnv("DB_NAME", "wwmbb-dev")
+	username := GetEnv("db.username", "wwm")
+	password := GetEnv("db.password", "wwm")
+	url := GetEnv("db.url", "ds064649.mlab.com:64649/wwmbb-dev")
+	databaseName := GetEnv("db.name", "wwmbb-dev")
 
 	log.Printf("%v Establishing connection to database <%v> on %v", LOG_TAG, databaseName, url)
 

@@ -28,7 +28,7 @@ func init() {
 
 func NewContent(subject string, message string) ([]byte, error) {
 	var doc bytes.Buffer
-	context := SmtpTemplateData{topic, message}
+	context := SmtpTemplateData{subject, message}
 	err := t.Execute(&doc, &context)
 	if err != nil {
 		log.Printf("%v error trying to execute mail template", LOG_TAG)

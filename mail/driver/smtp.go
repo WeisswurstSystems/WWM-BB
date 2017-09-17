@@ -36,7 +36,7 @@ func NewSMTPService() mail.Service {
 		service.user.username,
 		service.user.password,
 		service.user.smtpServer)
-	log.Printf("%v Setup Mail-Client for User %v on Server %v", mail.LOG_TAG, service.user.username, service.user.username)
+	log.Printf("%v Setup Mail-Client for User %v on Server %v", mail.LOG_TAG, service.user.username, service.user.smtpServer)
 
 	return &service
 }
