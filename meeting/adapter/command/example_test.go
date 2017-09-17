@@ -9,6 +9,7 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/removeproduct"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setbuyer"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setplace"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/invite"
 )
 
 func ExampleCommandHandler_CreateMeeting() {
@@ -117,6 +118,22 @@ func ExampleCommandHandler_SetPlace() {
 	// {
 	//   "place": "",
 	//   "meetingID": "",
+	//   "login": {
+	//     "mail": "",
+	//     "password": ""
+	//   }
+	// }
+}
+
+func ExampleCommandHandler_Invite() {
+	var request invite.Request
+	data, _ := json.MarshalIndent(request, "", "  ")
+	fmt.Printf("%s", data)
+
+	// Output:
+	// {
+	//   "meetingID": "",
+	//   "userMails": null,
 	//   "login": {
 	//     "mail": "",
 	//     "password": ""

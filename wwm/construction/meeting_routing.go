@@ -16,4 +16,7 @@ func AddMeetingRoutes(r *mux.Router) {
 	do.Handle("/removeProduct", wwm.Handler(MeetingCommand.RemoveProduct)).Methods("POST")
 	do.Handle("/setBuyer", wwm.Handler(MeetingCommand.SetBuyer)).Methods("POST")
 	do.Handle("/setPlace", wwm.Handler(MeetingCommand.SetPlace)).Methods("POST")
+
+	doID := r.PathPrefix("/{{meetingId/do").Subrouter()
+	doID.Handle("/invite", wwm.Handler(MeetingCommand.Invite)).Methods("POST")
 }
