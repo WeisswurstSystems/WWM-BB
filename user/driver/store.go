@@ -55,6 +55,6 @@ func (s *mongoStore) FindAllUnregistered() ([]user.User, error) {
 }
 
 func (s *mongoStore) Save(user user.User) error {
-	err := s.users.Insert(&user)
+	_, err := s.users.Upsert(bson.M{"login.mail": user.Mail}, &user)
 	return err
 }

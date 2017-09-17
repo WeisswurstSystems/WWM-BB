@@ -53,10 +53,6 @@ func (store *mongoStore) FindOne(id meeting.MeetingID) (meeting.Meeting, error) 
 }
 
 func (store *mongoStore) Save(meeting meeting.Meeting) error {
-	err := store.meetings.Insert(&meeting)
+	_, err := store.meetings.Upsert(bson.M{"id": meeting.ID}, meeting)
 	return err
-}
-
-func (store *mongoStore) Update(meeting meeting.Meeting) error {
-	return store.meetings.Update(bson.M{"id": meeting.ID}, meeting)
 }
