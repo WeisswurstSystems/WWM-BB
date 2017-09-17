@@ -18,7 +18,7 @@ type Mock struct {
 		RemoveProduct removeproduct.Request
 		SetBuyer      setbuyer.Request
 		SetPlace      setplace.Request
-		Invite invite.Request
+		Invite        invite.Request
 	}
 }
 
