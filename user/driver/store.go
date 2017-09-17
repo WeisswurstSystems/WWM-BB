@@ -24,7 +24,7 @@ func NewMongoStore() user.Store {
 
 func (s *mongoStore) FindByMail(email string) (user.User, error) {
 	var findByUserMail user.User
-	err := s.users.Find(bson.M{"mail": email}).One(&findByUserMail)
+	err := s.users.Find(bson.M{"login.mail": email}).One(&findByUserMail)
 	if err == mgo.ErrNotFound {
 		return user.User{}, user.ErrNotFound
 	}
