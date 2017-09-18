@@ -14,18 +14,21 @@ type invitationData struct {
 	MeetingPlace   string
 }
 
-const invitationTopic = "Einladung zum Meeting am {{.MeetingPlace}}"
+const invitationTopic = "Du wurdest eingeladen!"
 
 const invitationMessageTemplate = `
 Hallo {{.Usermail}}!
-
+<br><br>
 {{.MeetingCreator}} hat dich zu einem Treffen eingeladen.
+<br><br>
+<b>Wann?</b> {{.MeetingDate}}<br>
+<b>Wo?</b> {{.MeetingPlace}}
+<br><br>
+Unter dem folgenden Link kannst du beitreten und deine Bestellung aufgeben:
 
-Wann? {{.MeetingDate}}
-Wo? {{.MeetingDate}}
-
-Unter dem folgenden Link kannst du beitreten und deine Bestellung aufgeben
+<br><br>
 https://weisswurstsystems.github.io/WWM-ITM/{{.MeetingID}}
+<br><br>
 
 Viel Spaß beim bestellen!
 `
