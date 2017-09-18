@@ -23,7 +23,7 @@ type DetailedMeeting struct {
 }
 
 type DetailedOrder struct {
-	Customer   string      `json:"customer"`
+	Customer   CustomerMail      `json:"customer"`
 	Payed      bool        `json:"payed"`
 	Items      []OrderItem `json:"items"`
 	TotalPrice float64     `json:"totalPrice"`
