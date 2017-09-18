@@ -10,13 +10,10 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/wwm"
 	"net/http"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/toggleorderpayed"
-	"github.com/gorilla/mux"
-	"github.com/go-errors/errors"
-	"github.com/WeisswurstSystems/WWM-BB/meeting"
-	"github.com/gorilla/mux"
-	"errors"
-	"github.com/WeisswurstSystems/WWM-BB/meeting"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/invite"
+	"github.com/gorilla/mux"
+	"github.com/WeisswurstSystems/WWM-BB/meeting"
+	"github.com/go-errors/errors"
 )
 
 type Interactor interface {
@@ -26,6 +23,7 @@ type Interactor interface {
 	removeproduct.RemoveProductUseCase
 	setbuyer.SetBuyerUseCase
 	setplace.SetPlaceUseCase
+	invite.InviteUseCase
 	toggleorderpayed.ToggleOrderPayedUseCase
 }
 
