@@ -7,18 +7,20 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/removeproduct"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setbuyer"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setplace"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/toggleorderpayed"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/invite"
 )
 
 type Mock struct {
 	Requests struct {
-		CreateMeeting createmeeting.Request
-		CloseMeeting  closemeeting.Request
-		PutProduct    putproduct.Request
-		RemoveProduct removeproduct.Request
-		SetBuyer      setbuyer.Request
-		SetPlace      setplace.Request
-		Invite        invite.Request
+		CreateMeeting    createmeeting.Request
+		CloseMeeting     closemeeting.Request
+		PutProduct       putproduct.Request
+		RemoveProduct    removeproduct.Request
+		SetBuyer         setbuyer.Request
+		SetPlace         setplace.Request
+		Invite           invite.Request
+		ToggleOrderPayed toggleorderpayed.Request
 	}
 }
 
@@ -61,5 +63,10 @@ func (mock *Mock) SetPlace(request setplace.Request) error {
 
 func (mock *Mock) Invite(request invite.Request) error {
 	mock.Requests.Invite = request
+	return nil
+}
+
+func (mock *Mock) ToggleOrderPayed(request toggleorderpayed.Request) error {
+	mock.Requests.ToggleOrderPayed = request
 	return nil
 }
