@@ -6,7 +6,7 @@ import (
 
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
 	"github.com/WeisswurstSystems/WWM-BB/user"
-	"github.com/go-errors/errors"
+	"errors"
 	"github.com/gorilla/mux"
 )
 

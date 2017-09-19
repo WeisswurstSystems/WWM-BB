@@ -10,9 +10,10 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/wwm"
 	"net/http"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/toggleorderpayed"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/invite"
 	"github.com/gorilla/mux"
-	"github.com/go-errors/errors"
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
+	"errors"
 )
 
 type Interactor interface {
@@ -22,6 +23,7 @@ type Interactor interface {
 	removeproduct.RemoveProductUseCase
 	setbuyer.SetBuyerUseCase
 	setplace.SetPlaceUseCase
+	invite.InviteUseCase
 	toggleorderpayed.ToggleOrderPayedUseCase
 }
 
@@ -41,7 +43,9 @@ func (ch *CommandHandler) CloseMeeting(w http.ResponseWriter, req *http.Request)
 
 func (ch *CommandHandler) CreateMeeting(w http.ResponseWriter, req *http.Request) error {
 	var e createmeeting.Request
+	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
 	err := wwm.DecodeBody(req.Body, &e)
+	e.Meeting.Creator = e.Login.Mail
 	if err != nil {
 		return err
 	}
@@ -103,4 +107,21 @@ func (ch *CommandHandler) ToggleOrderPayed(w http.ResponseWriter, req *http.Requ
 		return err
 	}
 	return ch.Interactor.ToggleOrderPayed(e)
+}
+
+func (ch *CommandHandler) Invite(w http.ResponseWriter, req *http.Request) error {
+	var e invite.Request
+
+	id, ok := mux.Vars(req)["meetingId"]
+	if !ok {
+		return errors.New("meeting id url parameter missing")
+	}
+
+	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
+	e.MeetingID = meeting.MeetingID(id)
+	err := wwm.DecodeBody(req.Body, &e)
+	if err != nil {
+		return err
+	}
+	return ch.Interactor.Invite(e)
 }

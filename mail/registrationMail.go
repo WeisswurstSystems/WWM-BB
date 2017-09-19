@@ -10,9 +10,9 @@ type registrationData struct {
 	RegistrationID string
 }
 
-const topic = "Deine Registrierung bei der Weisswurst-Verwaltung"
+const registrationTopic = "Deine Registrierung bei der Weisswurst-Verwaltung"
 
-const messageTemplate = `
+const registrationMessageTemplate = `
 Hallo {{.Usermail}}!
 
 Vielen Dank für deine Registrierung.
@@ -25,7 +25,7 @@ Viel Spaß beim bestellen!
 var registrationTemplate = template.New("registration")
 
 func init() {
-	_, err := registrationTemplate.Parse(messageTemplate)
+	_, err := registrationTemplate.Parse(registrationMessageTemplate)
 	if err != nil {
 		panic(err)
 	}
@@ -40,7 +40,7 @@ func NewRegistrationMail(registrationId string, usermail string) (mail Mail) {
 		panic(err)
 	}
 
-	mail.Content, err = NewContent(topic, message.String())
+	mail.Content, err = NewContent(registrationTopic, message.String())
 	if err != nil {
 		panic(err)
 	}
