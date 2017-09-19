@@ -3,7 +3,7 @@ package closemeeting
 import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
 	"github.com/WeisswurstSystems/WWM-BB/user"
-	"github.com/go-errors/errors"
+	"errors"
 )
 
 type Mock struct {

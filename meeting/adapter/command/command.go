@@ -13,7 +13,7 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/invite"
 	"github.com/gorilla/mux"
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
-	"github.com/go-errors/errors"
+	"errors"
 )
 
 type Interactor interface {

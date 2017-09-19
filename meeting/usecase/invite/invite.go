@@ -5,7 +5,7 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
 	"github.com/WeisswurstSystems/WWM-BB/mail"
-	"github.com/go-errors/errors"
+	"errors"
 	"fmt"
 	"log"
 )
