@@ -2,27 +2,33 @@ package register
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/WeisswurstSystems/WWM-BB/mail"
 	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/WeisswurstSystems/WWM-BB/util"
 	"github.com/WeisswurstSystems/WWM-BB/wwm"
-	"net/http"
 )
 
+// RegisterUseCase is there to register a new User to the application.
 type RegisterUseCase interface {
 	Register(Request) error
 }
+
+// Interactor can do the register.
 type Interactor struct {
 	user.Store
 	MailService mail.Service
 }
 
+// Request for Registering a new user. Mailing can be enabled.
 type Request struct {
 	Mail        string `json:"mail"`
 	Password    string `json:"password"`
 	MailEnabled bool   `json:"mailEnabled"`
 }
 
+// Register creates the new user, if it does not already exist. It sends a mail with the RegistrationID.
 func (i Interactor) Register(req Request) error {
 	if err := req.Validate(); err != nil {
 		return err
@@ -42,6 +48,7 @@ func (i Interactor) Register(req Request) error {
 	return i.MailService.Send(m)
 }
 
+// isFree checks if the mail is not already registered in the application.
 func (interactor *Interactor) isFree(mail string) error {
 	_, err := interactor.Store.FindByMail(mail)
 	if err == user.ErrNotFound {
@@ -51,6 +58,7 @@ func (interactor *Interactor) isFree(mail string) error {
 	return &wwm.Error{message, http.StatusConflict}
 }
 
+// buildUser Builds a User with a random UUID and default roles.
 func buildUser(req Request) user.User {
 	uid := util.GetUID(60)
 	return user.User{
@@ -61,6 +69,7 @@ func buildUser(req Request) user.User {
 	}
 }
 
+// Validate checks if the Request is valid.
 func (e Request) Validate() error {
 	if e.Mail == "" {
 		return &wwm.Error{"Missing filed: mail", http.StatusBadRequest}
