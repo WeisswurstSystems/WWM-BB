@@ -2,6 +2,7 @@ package meeting
 
 import "time"
 
+// ReducedMeeting contains only limited (most important) data of a meeting.
 type ReducedMeeting struct {
 	ID        MeetingID `json:"id"`
 	Place     string    `json:"place"`
@@ -10,6 +11,7 @@ type ReducedMeeting struct {
 	Closed    bool      `json:"closed"`
 }
 
+// Reduced version of the meeting.
 func (m Meeting) Reduced() ReducedMeeting {
 	return ReducedMeeting{
 		ID:        m.ID,
@@ -20,6 +22,7 @@ func (m Meeting) Reduced() ReducedMeeting {
 	}
 }
 
+// AllReduced of a meeting list.
 func AllReduced(meetings []Meeting) []ReducedMeeting {
 	list := make([]ReducedMeeting, 0, len(meetings))
 	for _, v := range meetings {
