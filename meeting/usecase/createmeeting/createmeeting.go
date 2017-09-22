@@ -30,7 +30,7 @@ func (i Interactor) CreateMeeting(req Request) error {
 		return err
 	}
 
-	m.ID = meeting.MeetingID(util.GetUID(12))
+	m.ID = meeting.MeetingID(util.GetReadableUID())
 
 	err = i.Save(m)
 	if err != nil {

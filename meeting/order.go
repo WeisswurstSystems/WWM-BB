@@ -1,5 +1,8 @@
 package meeting
 
+// CustomerMail for representing the customer by mail.
+type CustomerMail string
+
 // OrderItem is a single item of a order.
 type OrderItem struct {
 	ItemName ProductName `json:"itemName"`
@@ -8,7 +11,7 @@ type OrderItem struct {
 
 // Order contains the order of a single customer.
 type Order struct {
-	Customer string      `json:"customer"`
+	Customer CustomerMail      `json:"customer"`
 	Payed    bool        `json:"payed"`
 	Items    []OrderItem `json:"items"`
 }

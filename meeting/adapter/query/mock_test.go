@@ -2,7 +2,7 @@ package query
 
 import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
-	"github.com/go-errors/errors"
+	"errors"
 )
 
 func NewMocking() (QueryHandler, *Mock) {

@@ -24,7 +24,7 @@ func NewMongoStore() user.Store {
 
 func (s *mongoStore) FindByMail(email string) (user.User, error) {
 	var findByUserMail user.User
-	err := s.users.Find(bson.M{"mail": email}).One(&findByUserMail)
+	err := s.users.Find(bson.M{"login.mail": email}).One(&findByUserMail)
 	if err == mgo.ErrNotFound {
 		return user.User{}, user.ErrNotFound
 	}
@@ -55,7 +55,7 @@ func (s *mongoStore) FindAllUnregistered() ([]user.User, error) {
 }
 
 func (s *mongoStore) Save(user user.User) error {
-	err := s.users.Insert(&user)
+	_, err := s.users.Upsert(bson.M{"login.mail": user.Mail}, &user)
 	return err
 }
 
