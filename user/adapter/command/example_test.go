@@ -34,7 +34,8 @@ func ExampleCommandHandler_ChangePassword() {
 	//     "mail": "",
 	//     "password": ""
 	//   },
-	//   "password": ""
+	//   "password": "",
+	//   "passwordRepeated": ""
 	// }
 }
 
