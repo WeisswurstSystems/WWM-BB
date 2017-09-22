@@ -1,9 +1,12 @@
 package changePassword
 
 import (
+	"net/http"
+
 	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
+	"github.com/WeisswurstSystems/WWM-BB/wwm"
 )
 
 // ChangePasswordUseCase changes the password of the user.
@@ -26,11 +29,23 @@ type Interactor struct {
 	authenticate.AuthenticateUseCase
 }
 
+var (
+	// ErrPasswordsNotEqual if the passwords are not equal
+	ErrPasswordsNotEqual = wwm.Error{
+		Message: "Passwords are not the same",
+		Code:    http.StatusBadRequest,
+	}
+)
+
 // ChangePassword changes the password of the User (by login).
 func (i Interactor) ChangePassword(request Request) error {
 	u, err := i.Authenticate(request.Login)
 	if err != nil {
 		return err
+	}
+
+	if request.Password != request.PasswordRepeated {
+		return ErrPasswordsNotEqual
 	}
 
 	u.Password = request.Password
