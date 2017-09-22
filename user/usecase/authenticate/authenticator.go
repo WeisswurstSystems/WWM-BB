@@ -1,9 +1,10 @@
 package authenticate
 
 import (
+	"net/http"
+
 	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/WeisswurstSystems/WWM-BB/wwm"
-	"net/http"
 )
 
 type AuthenticateUseCase interface {
@@ -20,6 +21,9 @@ var (
 
 func (i Interactor) Authenticate(l user.Login) (user.User, error) {
 	u, err := i.ReadStore.FindByMail(l.Mail)
+	if err == user.ErrNotFound {
+		return user.User{}, ErrNotAuthenticated
+	}
 	if err != nil {
 		return user.User{}, err
 	}
