@@ -7,6 +7,8 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/user/driver"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/activate"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
+	"github.com/WeisswurstSystems/WWM-BB/user/usecase/changePassword"
+	"github.com/WeisswurstSystems/WWM-BB/user/usecase/deleteAccount"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/register"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/setUpPayPal"
 )
@@ -15,15 +17,19 @@ var UserStore = driver.NewMongoStore()
 
 var MailService = mailDriver.NewSMTPService()
 
+var UserAuthenticateUseCase = authenticate.Interactor{
+	ReadStore: UserStore,
+}
+
 var UserUseCases = struct {
 	authenticate.AuthenticateUseCase
 	activate.ActivateUseCase
 	register.RegisterUseCase
 	setUpPayPal.SetUpPayPalUseCase
+	changePassword.ChangePasswordUseCase
+	deleteAccount.DeleteAccountUseCase
 }{
-	AuthenticateUseCase: authenticate.Interactor{
-		ReadStore: UserStore,
-	},
+	AuthenticateUseCase: UserAuthenticateUseCase,
 	ActivateUseCase: activate.Interactor{
 		Store: UserStore,
 	},
@@ -31,8 +37,17 @@ var UserUseCases = struct {
 		Store:       UserStore,
 		MailService: MailService,
 	},
+	ChangePasswordUseCase: changePassword.Interactor{
+		Store:               UserStore,
+		AuthenticateUseCase: UserAuthenticateUseCase,
+	},
+	DeleteAccountUseCase: deleteAccount.Interactor{
+		Store:               UserStore,
+		AuthenticateUseCase: UserAuthenticateUseCase,
+	},
 }
-var UserCommand = command.CommandHandler{
+
+var UserCommand = command.Handler{
 	Interactor: &UserUseCases,
 }
 var UserQuery = query.QueryHandler{

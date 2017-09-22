@@ -7,8 +7,10 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/wwm"
 )
 
+// MeetingID uniquely identifies a meeting.
 type MeetingID string
 
+// Meeting describes a planned meeting for multiple persons.
 type Meeting struct {
 	ID        MeetingID `json:"id"`
 	Place     string    `json:"place"`
@@ -21,22 +23,27 @@ type Meeting struct {
 	Offer     Offer     `json:"offer"`
 }
 
+// ReadStore can query meetings.
 type ReadStore interface {
 	FindAll() ([]Meeting, error)
 	FindAllReduced() ([]ReducedMeeting, error)
 	FindOne(id MeetingID) (Meeting, error)
 }
 
+// Store can read and write meetings.
 type Store interface {
 	ReadStore
 	WriteStore
 }
 
+// WriteStore can save (or change) a meeting.
 type WriteStore interface {
 	Save(meeting Meeting) error
 }
 
 var (
+	// ErrMeetingNotFound if a meeting is not found in a store.
 	ErrMeetingNotFound = wwm.Error{Code: http.StatusNotFound, Message: "The meeting does not exist"}
-	ErrNotAllowed      = wwm.Error{Code: http.StatusUnauthorized, Message: "Not allowed on this meeting"}
+	// ErrNotAllowed if a user is not allowed to do something on a meeting.
+	ErrNotAllowed = wwm.Error{Code: http.StatusUnauthorized, Message: "Not allowed on this meeting"}
 )

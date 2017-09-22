@@ -12,4 +12,7 @@ func AddUserRoutes(r *mux.Router) {
 	do.Handle("/register", wwm.Handler(UserCommand.Register)).Methods("POST")
 	do.Handle("/activate", wwm.Handler(UserCommand.Activate)).Methods("POST")
 	do.Handle("/setUpPayPal", wwm.Handler(UserCommand.SetUpPayPal)).Methods("POST")
+	do.Handle("/changePassword", wwm.Handler(UserCommand.ChangePassword)).Methods("POST")
+	do.Handle("/deleteAccount", wwm.Handler(UserCommand.DeleteAccount)).Methods("POST")
+
 }

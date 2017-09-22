@@ -8,6 +8,8 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/util"
 )
 
+// DetailedMeeting has extended information of a meeting.
+// For example the calculated price.
 type DetailedMeeting struct {
 	ID         MeetingID       `json:"id"`
 	Place      string          `json:"place"`
@@ -22,6 +24,7 @@ type DetailedMeeting struct {
 	TotalItems []OrderItem     `json:"totalItems"`
 }
 
+// DetailedOrder has extended information for an order.
 type DetailedOrder struct {
 	Customer   CustomerMail      `json:"customer"`
 	Payed      bool        `json:"payed"`
@@ -30,6 +33,7 @@ type DetailedOrder struct {
 	PayLink    string      `json:"payLink"`
 }
 
+// Detailed version of a meeting.
 func (m Meeting) Detailed(paypalLink string) DetailedMeeting {
 	detailedMeeting := DetailedMeeting{
 		ID:        m.ID,
@@ -69,6 +73,7 @@ func (m Meeting) Detailed(paypalLink string) DetailedMeeting {
 	return detailedMeeting
 }
 
+// ToDetailedOrders of a list of products with a paypal link.
 func ToDetailedOrders(orders []Order, products []Product, payPalLink string) []DetailedOrder {
 	var detailedOrders []DetailedOrder
 	for _, order := range orders {
@@ -77,6 +82,7 @@ func ToDetailedOrders(orders []Order, products []Product, payPalLink string) []D
 	return detailedOrders
 }
 
+// Detailed version of an order.
 func (order Order) Detailed(products []Product, paypalLink string) DetailedOrder {
 	var detailedOrder = DetailedOrder{
 		Customer: order.Customer,
