@@ -2,10 +2,11 @@ package query
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
 	"github.com/WeisswurstSystems/WWM-BB/wwm"
-	"net/http"
 )
 
 type QueryHandler struct {
@@ -19,9 +20,7 @@ func (ch *QueryHandler) FindAll(w http.ResponseWriter, req *http.Request) error 
 		return err
 	}
 
-	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-
 	return json.NewEncoder(w).Encode(results)
 }
 
@@ -37,8 +36,7 @@ func (ch *QueryHandler) Identity(w http.ResponseWriter, req *http.Request) error
 	if err != nil {
 		return err
 	}
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/json")
 
+	w.Header().Set("Content-Type", "application/json")
 	return json.NewEncoder(w).Encode(results)
 }

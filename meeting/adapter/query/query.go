@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"errors"
+
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
 	"github.com/WeisswurstSystems/WWM-BB/user"
-	"errors"
 	"github.com/gorilla/mux"
 )
 
@@ -23,9 +24,7 @@ func (ch *QueryHandler) FindAll(w http.ResponseWriter, req *http.Request) error 
 
 	reduced := meeting.AllReduced(results)
 
-	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-
 	return json.NewEncoder(w).Encode(reduced)
 }
 
@@ -43,13 +42,11 @@ func (ch *QueryHandler) FindByID(w http.ResponseWriter, req *http.Request) error
 	creatorUser, err := ch.UserStore.FindByMail(result.Creator)
 
 	if err != nil {
-		errors.New("Creator wurde nicht in Nutzer-DB gefunden")
+		return errors.New("Creator wurde nicht in Nutzer-DB gefunden")
 	}
 
 	detailedResult := result.Detailed(creatorUser.PayPal.MeLink)
 
-	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-
 	return json.NewEncoder(w).Encode(detailedResult)
 }
