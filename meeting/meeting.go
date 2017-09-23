@@ -19,7 +19,7 @@ type Meeting struct {
 	Date      time.Time `json:"date"`
 	CloseDate time.Time `json:"closeDate"`
 	Closed    bool      `json:"closed"`
-	Orders    []Order   `json:"orders"`
+	Orders    Orders    `json:"orders"`
 	Offer     Offer     `json:"offer"`
 }
 
