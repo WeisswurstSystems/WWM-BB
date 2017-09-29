@@ -9,7 +9,6 @@ import (
 type invitationData struct {
 	Usermail       string
 	MeetingCreator string
-	MeetingID      string
 	MeetingDate    string
 	MeetingPlace   string
 }
@@ -24,11 +23,7 @@ Hallo {{.Usermail}}!
 <b>Wann?</b> {{.MeetingDate}}<br>
 <b>Wo?</b> {{.MeetingPlace}}
 <br><br>
-Unter dem folgenden Link kannst du beitreten und deine Bestellung aufgeben:
-
-<br><br>
-https://weisswurstsystems.github.io/WWM-ITM/{{.MeetingID}}
-<br><br>
+Unter dem folgenden Link kannst du beitreten und deine Bestellung aufgeben.
 
 Viel Spaß beim bestellen!
 `
@@ -44,10 +39,9 @@ func init() {
 
 func NewInvitationMail(meeting meeting.Meeting, usermail string) (mail Mail) {
 	data := invitationData{
-		MeetingID: string(meeting.ID),
 		Usermail: usermail,
 		MeetingCreator:meeting.Creator,
-		MeetingDate: meeting.Date.Format("2006-01-02 15:04:05"),
+		MeetingDate: meeting.Date.Format("02.01.2006 15:04"),
 		MeetingPlace: meeting.Place,
 	}
 
@@ -57,7 +51,15 @@ func NewInvitationMail(meeting meeting.Meeting, usermail string) (mail Mail) {
 		panic(err)
 	}
 
-	mail.Content, err = NewContent(invitationTopic, message.String())
+	smtpData := SmtpTemplateData{
+		BodyButtonLink: "https://weisswurstsystems.github.io/WWM-ITM/" + meeting.ID,
+		BodyButtonText: "Meeting beitreten",
+		Subject: invitationTopic,
+		BodyShortText: "Du wurdest von " + usermail + " zu einem Meeting eingeladen",
+		Body: message.String(),
+	}
+
+	mail.Content, err = NewContent(smtpData)
 	if err != nil {
 		panic(err)
 	}
