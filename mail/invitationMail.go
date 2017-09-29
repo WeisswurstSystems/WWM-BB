@@ -52,7 +52,7 @@ func NewInvitationMail(meeting meeting.Meeting, usermail string) (mail Mail) {
 	}
 
 	smtpData := SmtpTemplateData{
-		BodyButtonLink: "https://weisswurstsystems.github.io/WWM-ITM/" + meeting.ID,
+		BodyButtonLink: "https://weisswurstsystems.github.io/WWM-ITM/" + string(meeting.ID),
 		BodyButtonText: "Meeting beitreten",
 		Subject: invitationTopic,
 		BodyShortText: "Du wurdest von " + usermail + " zu einem Meeting eingeladen",

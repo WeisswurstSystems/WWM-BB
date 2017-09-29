@@ -9,14 +9,14 @@ type registrationData struct {
 	Usermail       string
 }
 
-const registrationTopic = "Deine Registrierung bei der Weisswurst-Verwaltung"
+const registrationTopic = "Deine Registrierung"
 
 const registrationMessageTemplate = `
 Hallo {{.Usermail}}!
-
-Vielen Dank für deine Registrierung.
-Um Dein Konto zu aktivieren, klicke bitte auf den Button.
-
+<br><br>
+Vielen Dank für deine Registrierung.<br>
+Um Dein Konto zu aktivieren, klicke bitte auf den unten stehenden Button.
+<br><br>
 Viel Spaß beim bestellen!
 `
 
@@ -42,7 +42,7 @@ func NewRegistrationMail(registrationId string, usermail string) (mail Mail) {
 		BodyButtonLink: "http://wwm-bb.herokuapp.com/users/register/" + registrationId,
 		BodyButtonText: "Aktivieren",
 		Subject: registrationTopic,
-		BodyShortText: "Deine Registrierung bei der Weisswurstverwaltung",
+		BodyShortText: "Um deine Registrierung zu bestätigen, musst du nur noch eine Sache erledigen.",
 		Body: message.String(),
 	}
 
