@@ -3,7 +3,6 @@ package query
 import (
 	"encoding/json"
 	"net/http"
-
 	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
 	"github.com/WeisswurstSystems/WWM-BB/wwm"
@@ -15,7 +14,21 @@ type QueryHandler struct {
 }
 
 func (ch *QueryHandler) FindAll(w http.ResponseWriter, req *http.Request) error {
-	results, err := ch.Store.FindAll()
+	var e user.Login
+	var ok bool
+	e.Mail, e.Password, ok = req.BasicAuth()
+
+	if(!ok) {
+		return wwm.Error{"Unauthenticated", http.StatusUnauthorized}
+	}
+
+	_, err := ch.AuthenticateUseCase.Authenticate(e)
+	if err != nil {
+		return err
+	}
+
+	var results []user.User
+	results, err = ch.Store.FindAll()
 	if err != nil {
 		return err
 	}

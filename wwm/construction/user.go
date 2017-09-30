@@ -52,4 +52,5 @@ var UserCommand = command.Handler{
 }
 var UserQuery = query.QueryHandler{
 	Store: UserStore,
+	AuthenticateUseCase: UserAuthenticateUseCase,
 }
