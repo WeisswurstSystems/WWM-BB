@@ -60,7 +60,8 @@ func ExampleCommandHandler_Register() {
 
 	// Output:
 	// {
-	//   "mail": ""
+	//   "mail": "",
+	//   "password": "",
 	//   "mailEnabled": false
 	// }
 }
