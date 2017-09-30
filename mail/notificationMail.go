@@ -18,6 +18,8 @@ func NewNotificiationMail(
 	meeting meeting.Meeting) (mail Mail) {
 
 	smtpData := SmtpTemplateData{
+		BodyButtonLink: "https://weisswurstsystems.github.io/WWM-ITM/" + string(meeting.ID),
+		BodyButtonText: "Gehe zu Meeting",
 		Subject:       notificationTopic,
 		BodyShortText: notificationShortMessage,
 		Body:          notificationMessage,
