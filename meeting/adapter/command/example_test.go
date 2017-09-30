@@ -32,8 +32,7 @@ func ExampleCommandHandler_CreateMeeting() {
 	//     "offer": null
 	//   },
 	//   "login": {
-	//     "mail": "",
-	//     "password": ""
+	//     "mail": ""
 	//   }
 	// }
 }
@@ -48,8 +47,7 @@ func ExampleCommandHandler_CloseMeeting() {
 	// {
 	//   "meetingID": "",
 	//   "login": {
-	//     "mail": "",
-	//     "password": ""
+	//     "mail": ""
 	//   }
 	// }
 }
@@ -68,8 +66,7 @@ func ExampleCommandHandler_PutProduct() {
 	//     "price": 0
 	//   },
 	//   "login": {
-	//     "mail": "",
-	//     "password": ""
+	//     "mail": ""
 	//   }
 	// }
 }
@@ -85,8 +82,7 @@ func ExampleCommandHandler_RemoveProduct() {
 	//   "productName": "",
 	//   "meetingID": "",
 	//   "login": {
-	//     "mail": "",
-	//     "password": ""
+	//     "mail": ""
 	//   }
 	// }
 }
@@ -102,8 +98,7 @@ func ExampleCommandHandler_SetBuyer() {
 	//   "buyer": "",
 	//   "meetingID": "",
 	//   "login": {
-	//     "mail": "",
-	//     "password": ""
+	//     "mail": ""
 	//   }
 	// }
 }
@@ -119,8 +114,7 @@ func ExampleCommandHandler_SetPlace() {
 	//   "place": "",
 	//   "meetingID": "",
 	//   "login": {
-	//     "mail": "",
-	//     "password": ""
+	//     "mail": ""
 	//   }
 	// }
 }
@@ -136,8 +130,7 @@ func ExampleCommandHandler_PayOrder() {
 	//   "meetingID": "",
 	//   "customer": "",
 	//   "login": {
-	//     "mail": "",
-	//     "password": ""
+	//     "mail": ""
 	//   }
 	// }
 }
