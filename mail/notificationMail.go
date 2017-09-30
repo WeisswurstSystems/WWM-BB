@@ -23,10 +23,10 @@ func NewNotificiationMail(
 		Body:          notificationMessage,
 	}
 
-	var receiverList []meeting.CustomerMail
+	var receiverList []string
 
 	for _, orderItem := range meeting.Orders {
-		receiverList = append(receiverList, orderItem.Customer)
+		receiverList = append(receiverList, string(orderItem.Customer))
 	}
 
 	var err error
@@ -35,6 +35,6 @@ func NewNotificiationMail(
 	if err != nil {
 		panic(err)
 	}
-	mail.Receivers = []string(receiverList)
+	mail.Receivers = receiverList
 	return mail
 }

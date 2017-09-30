@@ -12,6 +12,7 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setplace"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/toggleorderpayed"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/invite"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/notify"
 )
 
 var MeetingStore = driver.NewMongoStore()
@@ -24,6 +25,7 @@ var MeetingUseCases = struct {
 	setbuyer.SetBuyerUseCase
 	setplace.SetPlaceUseCase
 	invite.InviteUseCase
+	notify.NotifyUseCase
 	toggleorderpayed.ToggleOrderPayedUseCase
 }{
 	createmeeting.Interactor{MeetingStore, UserUseCases.AuthenticateUseCase},
@@ -33,6 +35,7 @@ var MeetingUseCases = struct {
 	setbuyer.Interactor{MeetingStore, UserUseCases.AuthenticateUseCase},
 	setplace.Interactor{MeetingStore, UserUseCases.AuthenticateUseCase},
 	invite.Interactor{MeetingStore, MailService, UserUseCases.AuthenticateUseCase},
+	notify.Interactor{MeetingStore, MailService, UserUseCases.AuthenticateUseCase},
 	toggleorderpayed.Interactor{MeetingStore, UserUseCases.AuthenticateUseCase},
 }
 
