@@ -31,7 +31,8 @@ func ExampleCommandHandler_ChangePassword() {
 	// Output:
 	// {
 	//   "login": {
-	//     "mail": ""
+	//     "mail": "",
+	//     "password": ""
 	//   },
 	//   "password": "",
 	//   "passwordRepeated": ""
@@ -47,7 +48,8 @@ func ExampleCommandHandler_DeleteAccount() {
 	// Output:
 	// {
 	//   "login": {
-	//     "mail": ""
+	//     "mail": "",
+	//     "password": ""
 	//   }
 	// }
 }

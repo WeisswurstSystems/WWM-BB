@@ -10,7 +10,7 @@ import (
 // Login describes the information necessary for a user.
 type Login struct {
 	Mail     string `json:"mail"`
-	Password string `json:"-"`
+	Password string `json:"password"`
 }
 
 // ToString creates a console representation, that does hide the password.

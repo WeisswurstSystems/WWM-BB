@@ -3,6 +3,7 @@ package query
 import (
 	"encoding/json"
 	"net/http"
+
 	"github.com/WeisswurstSystems/WWM-BB/user"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/authenticate"
 	"github.com/WeisswurstSystems/WWM-BB/wwm"
@@ -13,13 +14,14 @@ type QueryHandler struct {
 	authenticate.AuthenticateUseCase
 }
 
+// FindAll Users if authenticated with Basic Authentication. The Users are represented with PublicUser(s).
 func (ch *QueryHandler) FindAll(w http.ResponseWriter, req *http.Request) error {
 	var e user.Login
 	var ok bool
 	e.Mail, e.Password, ok = req.BasicAuth()
 
-	if(!ok) {
-		return wwm.Error{"Unauthenticated", http.StatusUnauthorized}
+	if !ok {
+		return wwm.Error{Message: "Unauthenticated", Code: http.StatusUnauthorized}
 	}
 
 	_, err := ch.AuthenticateUseCase.Authenticate(e)
@@ -27,10 +29,14 @@ func (ch *QueryHandler) FindAll(w http.ResponseWriter, req *http.Request) error 
 		return err
 	}
 
-	var results []user.User
-	results, err = ch.Store.FindAll()
+	users, err := ch.Store.FindAll()
 	if err != nil {
 		return err
+	}
+
+	var results []user.PublicUser
+	for _, u := range users {
+		results = append(results, u.PublicUser())
 	}
 
 	w.Header().Set("Content-Type", "application/json")

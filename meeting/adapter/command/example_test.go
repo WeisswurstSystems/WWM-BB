@@ -3,6 +3,7 @@ package command
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/closemeeting"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/createmeeting"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/putproduct"
@@ -32,7 +33,8 @@ func ExampleCommandHandler_CreateMeeting() {
 	//     "offer": null
 	//   },
 	//   "login": {
-	//     "mail": ""
+	//     "mail": "",
+	//     "password": ""
 	//   }
 	// }
 }
@@ -47,7 +49,8 @@ func ExampleCommandHandler_CloseMeeting() {
 	// {
 	//   "meetingID": "",
 	//   "login": {
-	//     "mail": ""
+	//     "mail": "",
+	//     "password": ""
 	//   }
 	// }
 }
@@ -66,7 +69,8 @@ func ExampleCommandHandler_PutProduct() {
 	//     "price": 0
 	//   },
 	//   "login": {
-	//     "mail": ""
+	//     "mail": "",
+	//     "password": ""
 	//   }
 	// }
 }
@@ -82,7 +86,8 @@ func ExampleCommandHandler_RemoveProduct() {
 	//   "productName": "",
 	//   "meetingID": "",
 	//   "login": {
-	//     "mail": ""
+	//     "mail": "",
+	//     "password": ""
 	//   }
 	// }
 }
@@ -98,7 +103,8 @@ func ExampleCommandHandler_SetBuyer() {
 	//   "buyer": "",
 	//   "meetingID": "",
 	//   "login": {
-	//     "mail": ""
+	//     "mail": "",
+	//     "password": ""
 	//   }
 	// }
 }
@@ -114,7 +120,8 @@ func ExampleCommandHandler_SetPlace() {
 	//   "place": "",
 	//   "meetingID": "",
 	//   "login": {
-	//     "mail": ""
+	//     "mail": "",
+	//     "password": ""
 	//   }
 	// }
 }
@@ -130,7 +137,8 @@ func ExampleCommandHandler_PayOrder() {
 	//   "meetingID": "",
 	//   "customer": "",
 	//   "login": {
-	//     "mail": ""
+	//     "mail": "",
+	//     "password": ""
 	//   }
 	// }
 }
