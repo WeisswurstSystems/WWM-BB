@@ -43,9 +43,9 @@ func TestInteractor_Authenticate(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name:    "wrong login error",
+			name:    "wrong password error",
 			i:       Interactor{ReadStore: storeWithHans},
-			args:    args{l: user.Login{Mail: "wrong", Password: "wrong"}},
+			args:    args{l: user.Login{Mail: user.Hans.Login.Mail, Password: "wrong"}},
 			want:    user.User{},
 			wantErr: true,
 		},
