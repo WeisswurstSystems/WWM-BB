@@ -56,3 +56,17 @@ var (
 func (user User) IsRegistered() bool {
 	return user.RegistrationID == ""
 }
+
+var (
+	// Hans is a pseudo user with admin role
+	Hans = User{
+		Login: Login{
+			Mail:     "hans@gmail.com",
+			Password: "hansistsogeil",
+		},
+		Roles: []string{"admin"},
+		PayPal: PayPal{
+			MeLink: "http://www.paypal.me/hans",
+		},
+	}
+)

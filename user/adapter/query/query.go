@@ -10,7 +10,7 @@ import (
 )
 
 type QueryHandler struct {
-	user.Store
+	Store user.ReadStore
 	authenticate.AuthenticateUseCase
 }
 
@@ -46,10 +46,6 @@ func (ch *QueryHandler) FindAll(w http.ResponseWriter, req *http.Request) error 
 func (ch *QueryHandler) Identity(w http.ResponseWriter, req *http.Request) error {
 	var e user.Login
 	e.Mail, e.Password, _ = req.BasicAuth()
-	err := wwm.DecodeBody(req.Body, &e)
-	if err != nil {
-		return err
-	}
 
 	results, err := ch.AuthenticateUseCase.Authenticate(e)
 	if err != nil {
