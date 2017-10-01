@@ -15,18 +15,12 @@ type OrderItem struct {
 	Amount   int         `json:"amount"`
 }
 
-// OrderItems is a collection of OrderItems
-type OrderItems []OrderItem
-
 // Order contains the order of a single customer.
 type Order struct {
 	Customer CustomerMail `json:"customer"`
 	Payed    bool         `json:"payed"`
-	Items    OrderItems   `json:"items"`
+	Items    []OrderItem  `json:"items"`
 }
-
-// Orders is a collection of orders
-type Orders []Order
 
 var (
 	// ErrOrderNotPresent if the order is not contained in the orders
@@ -37,18 +31,17 @@ var (
 )
 
 // AddItem to the collection of OrderItem. If the product already exists, the amount is added.
-func (ois OrderItems) AddItem(item OrderItem) OrderItems {
-	i, _, found := ois.FindItemByProductName(item.ItemName)
+func (order *Order) AddItem(item OrderItem) {
+	i, _, found := order.FindItemByProductName(item.ItemName)
 	if !found {
-		return append(ois, item)
+		order.Items = append(order.Items, item)
 	}
-	ois[i].Amount += item.Amount
-	return ois
+	order.Items[i].Amount += item.Amount
 }
 
 // FindItemByProductName if it already exists in the collection.
-func (ois OrderItems) FindItemByProductName(name ProductName) (index int, item OrderItem, found bool) {
-	for i, item := range ois {
+func (order *Order) FindItemByProductName(name ProductName) (index int, item OrderItem, found bool) {
+	for i, item := range order.Items {
 		if item.ItemName == name {
 			return i, item, true
 		}
@@ -57,8 +50,8 @@ func (ois OrderItems) FindItemByProductName(name ProductName) (index int, item O
 }
 
 // FindOrderByCustomer in the order collection. If not found return a new Order for the customer.
-func (orders Orders) FindOrderByCustomer(Customer CustomerMail) (index int, order Order, found bool) {
-	for i, order := range orders {
+func (coll *OrderCollection) FindOrderByCustomer(Customer CustomerMail) (index int, order Order, found bool) {
+	for i, order := range coll.items {
 		if order.Customer == Customer {
 			return i, order, true
 		}
@@ -67,13 +60,12 @@ func (orders Orders) FindOrderByCustomer(Customer CustomerMail) (index int, orde
 }
 
 // AddOrderItemForCustomer in the order collection. If no order for the customer exists, a new one is created.
-func (orders Orders) AddOrderItemForCustomer(item OrderItem, Customer CustomerMail) Orders {
-	i, order, found := orders.FindOrderByCustomer(Customer)
+func (coll *OrderCollection) AddOrderItemForCustomer(item OrderItem, Customer CustomerMail) {
+	i, order, found := coll.FindOrderByCustomer(Customer)
 	if !found {
-		order.Items = []OrderItem{item}
+		order.Items.AddItem(item)
 		order.Customer = Customer
-		return append(orders, order)
+		coll.items = append(coll.items, order)
 	}
-	orders[i].Items = order.Items.AddItem(item)
-	return orders
+	coll.items[i].Items.AddItem(item)
 }

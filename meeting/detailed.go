@@ -26,11 +26,11 @@ type DetailedMeeting struct {
 
 // DetailedOrder has extended information for an order.
 type DetailedOrder struct {
-	Customer   CustomerMail      `json:"customer"`
-	Payed      bool        `json:"payed"`
-	Items      []OrderItem `json:"items"`
-	TotalPrice float64     `json:"totalPrice"`
-	PayLink    string      `json:"payLink"`
+	Customer   CustomerMail `json:"customer"`
+	Payed      bool         `json:"payed"`
+	Items      []OrderItem  `json:"items"`
+	TotalPrice float64      `json:"totalPrice"`
+	PayLink    string       `json:"payLink"`
 }
 
 // Detailed version of a meeting.
@@ -74,9 +74,9 @@ func (m Meeting) Detailed(paypalLink string) DetailedMeeting {
 }
 
 // ToDetailedOrders of a list of products with a paypal link.
-func ToDetailedOrders(orders []Order, products []Product, payPalLink string) []DetailedOrder {
+func ToDetailedOrders(orders OrderCollection, products []Product, payPalLink string) []DetailedOrder {
 	var detailedOrders []DetailedOrder
-	for _, order := range orders {
+	for _, order := range orders.Items {
 		detailedOrders = append(detailedOrders, order.Detailed(products, payPalLink))
 	}
 	return detailedOrders
@@ -87,7 +87,7 @@ func (order Order) Detailed(products []Product, paypalLink string) DetailedOrder
 	var detailedOrder = DetailedOrder{
 		Customer: order.Customer,
 		Payed:    order.Payed,
-		Items:    order.Items,
+		Items:    order.Items.Items,
 	}
 
 	var resultPrice float64
