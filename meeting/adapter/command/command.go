@@ -14,6 +14,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
 	"errors"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/notify"
 )
 
 type Interactor interface {
@@ -24,6 +25,7 @@ type Interactor interface {
 	setbuyer.SetBuyerUseCase
 	setplace.SetPlaceUseCase
 	invite.InviteUseCase
+	notify.NotifyUseCase
 	toggleorderpayed.ToggleOrderPayedUseCase
 }
 
@@ -124,4 +126,21 @@ func (ch *CommandHandler) Invite(w http.ResponseWriter, req *http.Request) error
 		return err
 	}
 	return ch.Interactor.Invite(e)
+}
+
+func (ch *CommandHandler) Notify(w http.ResponseWriter, req *http.Request) error {
+	var e notify.Request
+
+	id, ok := mux.Vars(req)["meetingId"]
+	if !ok {
+		return errors.New("meeting id url parameter missing")
+	}
+
+	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
+	e.MeetingID = meeting.MeetingID(id)
+	err := wwm.DecodeBody(req.Body, &e)
+	if err != nil {
+		return err
+	}
+	return ch.Interactor.Notify(e)
 }
