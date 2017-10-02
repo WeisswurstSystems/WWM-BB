@@ -37,5 +37,5 @@ func (i *Interactor) Order(req Request) error {
 	}
 
 	m.AddOrderItemForCustomer(req.Item, meeting.CustomerMail(u.Mail))
-	return nil
+	return i.Save(m)
 }
