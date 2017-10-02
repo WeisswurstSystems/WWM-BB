@@ -26,11 +26,11 @@ type DetailedMeeting struct {
 
 // DetailedOrder has extended information for an order.
 type DetailedOrder struct {
-	Customer   CustomerMail      `json:"customer"`
-	Payed      bool        `json:"payed"`
-	Items      []OrderItem `json:"items"`
-	TotalPrice float64     `json:"totalPrice"`
-	PayLink    string      `json:"payLink"`
+	Customer   CustomerMail `json:"customer"`
+	Payed      bool         `json:"payed"`
+	Items      []OrderItem  `json:"items"`
+	TotalPrice float64      `json:"totalPrice"`
+	PayLink    string       `json:"payLink"`
 }
 
 // Detailed version of a meeting.

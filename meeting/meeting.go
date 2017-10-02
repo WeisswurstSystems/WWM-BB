@@ -47,3 +47,24 @@ var (
 	// ErrNotAllowed if a user is not allowed to do something on a meeting.
 	ErrNotAllowed = wwm.Error{Code: http.StatusUnauthorized, Message: "Not allowed on this meeting"}
 )
+
+// FindOrderByCustomer in the order collection. If not found return a new Order for the customer.
+func (m *Meeting) FindOrderByCustomer(customer CustomerMail) (index int, order Order, found bool) {
+	for i, order := range m.Orders {
+		if order.Customer == customer {
+			return i, order, true
+		}
+	}
+	return -1, Order{Customer: customer}, false
+}
+
+// AddOrderItemForCustomer in the order collection. If no order for the customer exists, a new one is created.
+func (m *Meeting) AddOrderItemForCustomer(item OrderItem, customer CustomerMail) {
+	i, order, found := m.FindOrderByCustomer(customer)
+	if !found {
+		order.AddItem(item)
+		m.Orders = append(m.Orders, order)
+		return
+	}
+	m.Orders[i].AddItem(item)
+}
