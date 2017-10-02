@@ -20,12 +20,12 @@ type Request struct {
 
 // Interactor for doing the order logic.
 type Interactor struct {
-	authenticate.AuthenticateUseCase
 	meeting.Store
+	authenticate.AuthenticateUseCase
 }
 
 // Order adds the item to the costumers order in the given meeting.
-func (i *Interactor) Order(req Request) error {
+func (i Interactor) Order(req Request) error {
 	m, err := i.FindOne(req.MeetingID)
 	if err != nil {
 		return err

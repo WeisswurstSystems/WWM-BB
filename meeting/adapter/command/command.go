@@ -1,19 +1,21 @@
 package command
 
 import (
+	"errors"
+	"net/http"
+
+	"github.com/WeisswurstSystems/WWM-BB/meeting"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/closemeeting"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/createmeeting"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/invite"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/order"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/putproduct"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/removeproduct"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setbuyer"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setplace"
-	"github.com/WeisswurstSystems/WWM-BB/wwm"
-	"net/http"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/toggleorderpayed"
-	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/invite"
+	"github.com/WeisswurstSystems/WWM-BB/wwm"
 	"github.com/gorilla/mux"
-	"github.com/WeisswurstSystems/WWM-BB/meeting"
-	"errors"
 )
 
 type Interactor interface {
@@ -24,6 +26,7 @@ type Interactor interface {
 	setbuyer.SetBuyerUseCase
 	setplace.SetPlaceUseCase
 	invite.InviteUseCase
+	order.OrderUseCase
 	toggleorderpayed.ToggleOrderPayedUseCase
 }
 
@@ -94,7 +97,7 @@ func (ch *CommandHandler) SetPlace(w http.ResponseWriter, req *http.Request) err
 
 func (ch *CommandHandler) ToggleOrderPayed(w http.ResponseWriter, req *http.Request) error {
 	var e toggleorderpayed.Request
-	e.Login.Mail, e.Login.Password, _  = req.BasicAuth()
+	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
 
 	id, ok := mux.Vars(req)["meetingId"]
 	if !ok {
@@ -124,4 +127,21 @@ func (ch *CommandHandler) Invite(w http.ResponseWriter, req *http.Request) error
 		return err
 	}
 	return ch.Interactor.Invite(e)
+}
+
+func (ch *CommandHandler) Order(w http.ResponseWriter, req *http.Request) error {
+	var e order.Request
+	err := wwm.DecodeBody(req.Body, &e)
+
+	id, ok := mux.Vars(req)["meetingId"]
+	if !ok {
+		return errors.New("meeting id url parameter missing")
+	}
+
+	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
+	e.MeetingID = meeting.MeetingID(id)
+	if err != nil {
+		return err
+	}
+	return ch.Interactor.Order(e)
 }

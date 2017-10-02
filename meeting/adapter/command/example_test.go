@@ -3,8 +3,10 @@ package command
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/closemeeting"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/createmeeting"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/order"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/putproduct"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/removeproduct"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setbuyer"
@@ -139,5 +141,25 @@ func ExampleCommandHandler_PayOrder() {
 	//     "mail": "",
 	//     "password": ""
 	//   }
+	// }
+}
+
+func ExampleCommandHandler_Order() {
+	// Send a json Request in this form
+	var request order.Request
+	data, _ := json.MarshalIndent(request, "", "  ")
+	fmt.Printf("%s", data)
+
+	// Output:
+	// {
+	//   "login": {
+	//     "mail": "",
+	//     "password": ""
+	//   },
+	//   "orderItem": {
+	//     "itemName": "",
+	//     "amount": 0
+	//   },
+	//   "meetingID": ""
 	// }
 }

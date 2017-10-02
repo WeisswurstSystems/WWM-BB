@@ -3,12 +3,13 @@ package command
 import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/closemeeting"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/createmeeting"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/invite"
+	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/order"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/putproduct"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/removeproduct"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setbuyer"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/setplace"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/toggleorderpayed"
-	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/invite"
 )
 
 type Mock struct {
@@ -21,6 +22,7 @@ type Mock struct {
 		SetPlace         setplace.Request
 		Invite           invite.Request
 		ToggleOrderPayed toggleorderpayed.Request
+		Order            order.Request
 	}
 }
 
@@ -68,5 +70,10 @@ func (mock *Mock) Invite(request invite.Request) error {
 
 func (mock *Mock) ToggleOrderPayed(request toggleorderpayed.Request) error {
 	mock.Requests.ToggleOrderPayed = request
+	return nil
+}
+
+func (mock *Mock) Order(request order.Request) error {
+	mock.Requests.Order = request
 	return nil
 }

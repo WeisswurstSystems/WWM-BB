@@ -91,12 +91,9 @@ func (order Order) Detailed(products []Product, paypalLink string) DetailedOrder
 	}
 
 	var resultPrice float64
-
-	for _, item := range detailedOrder.Items {
-		price := products[util.IndexOf(len(products), func(i int) bool {
-			return products[i].Name == item.ItemName
-		})].Price
-		resultPrice += (float64(item.Amount) * price)
+	for _, item := range order.Items {
+		product, _ := FindProductByName(products, item.ItemName)
+		resultPrice += float64(item.Amount) * product.Price
 	}
 
 	detailedOrder.TotalPrice = util.FloatToFixed(resultPrice, 2)
@@ -109,4 +106,16 @@ func (order Order) Detailed(products []Product, paypalLink string) DetailedOrder
 	}
 
 	return detailedOrder
+}
+
+func FindProductByName(products []Product, name ProductName) (p Product, found bool) {
+	for _, product := range products {
+		if product.Name == name {
+			return product, true
+		}
+	}
+	return Product{
+		Name:  name,
+		Price: 0,
+	}, false
 }
