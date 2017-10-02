@@ -48,24 +48,3 @@ func (order *Order) FindItemByProductName(name ProductName) (index int, item Ord
 	}
 	return -1, OrderItem{}, false
 }
-
-// FindOrderByCustomer in the order collection. If not found return a new Order for the customer.
-func (coll *OrderCollection) FindOrderByCustomer(Customer CustomerMail) (index int, order Order, found bool) {
-	for i, order := range coll.items {
-		if order.Customer == Customer {
-			return i, order, true
-		}
-	}
-	return -1, Order{}, false
-}
-
-// AddOrderItemForCustomer in the order collection. If no order for the customer exists, a new one is created.
-func (coll *OrderCollection) AddOrderItemForCustomer(item OrderItem, Customer CustomerMail) {
-	i, order, found := coll.FindOrderByCustomer(Customer)
-	if !found {
-		order.Items.AddItem(item)
-		order.Customer = Customer
-		coll.items = append(coll.items, order)
-	}
-	coll.items[i].Items.AddItem(item)
-}
