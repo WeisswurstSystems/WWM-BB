@@ -74,9 +74,9 @@ func (m Meeting) Detailed(paypalLink string) DetailedMeeting {
 }
 
 // ToDetailedOrders of a list of products with a paypal link.
-func ToDetailedOrders(orders OrderCollection, products []Product, payPalLink string) []DetailedOrder {
+func ToDetailedOrders(orders []Order, products []Product, payPalLink string) []DetailedOrder {
 	var detailedOrders []DetailedOrder
-	for _, order := range orders.Items {
+	for _, order := range orders {
 		detailedOrders = append(detailedOrders, order.Detailed(products, payPalLink))
 	}
 	return detailedOrders
@@ -87,7 +87,7 @@ func (order Order) Detailed(products []Product, paypalLink string) DetailedOrder
 	var detailedOrder = DetailedOrder{
 		Customer: order.Customer,
 		Payed:    order.Payed,
-		Items:    order.Items.Items,
+		Items:    order.Items,
 	}
 
 	var resultPrice float64

@@ -49,22 +49,21 @@ var (
 )
 
 // FindOrderByCustomer in the order collection. If not found return a new Order for the customer.
-func (m *Meeting) FindOrderByCustomer(Customer CustomerMail) (index int, order Order, found bool) {
-	for i, order := range coll.items {
-		if order.Customer == Customer {
+func (m *Meeting) FindOrderByCustomer(customer CustomerMail) (index int, order Order, found bool) {
+	for i, order := range m.Orders {
+		if order.Customer == customer {
 			return i, order, true
 		}
 	}
-	return -1, Order{}, false
+	return -1, Order{Customer: customer}, false
 }
 
 // AddOrderItemForCustomer in the order collection. If no order for the customer exists, a new one is created.
-func (m *Meeting) AddOrderItemForCustomer(item OrderItem, Customer CustomerMail) {
-	i, order, found := coll.FindOrderByCustomer(Customer)
+func (m *Meeting) AddOrderItemForCustomer(item OrderItem, customer CustomerMail) {
+	i, order, found := m.FindOrderByCustomer(customer)
 	if !found {
-		order.Items.AddItem(item)
-		order.Customer = Customer
-		coll.items = append(coll.items, order)
+		order.AddItem(item)
+		m.Orders = append(m.Orders, order)
 	}
-	coll.items[i].Items.AddItem(item)
+	m.Orders[i].AddItem(item)
 }
