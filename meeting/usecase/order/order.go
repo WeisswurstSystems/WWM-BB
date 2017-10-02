@@ -36,6 +36,6 @@ func (i *Interactor) Order(req Request) error {
 		return err
 	}
 
-	m.Orders = m.Orders.AddOrderItemForCustomer(req.Item, meeting.CustomerMail(u.Mail))
+	m.AddOrderItemForCustomer(req.Item, meeting.CustomerMail(u.Mail))
 	return nil
 }
