@@ -67,15 +67,50 @@ func TestMeeting_AddOrderItemForCustomer(t *testing.T) {
 		customer CustomerMail
 	}
 	tests := []struct {
-		name string
-		m    *Meeting
-		args args
+		name             string
+		m                *Meeting
+		args             args
+		wantBananaAmount int
 	}{
-	// TODO: Add test cases.
+		{
+			name: "add already existing product",
+			m: &Meeting{
+				Orders: []Order{
+					Order{
+						Customer: "asdf",
+						Items:    []OrderItem{OrderItem{Amount: 1, ItemName: "banana"}},
+					},
+				}},
+			args: args{
+				item:     OrderItem{Amount: 2, ItemName: "banana"},
+				customer: "asdf",
+			},
+			wantBananaAmount: 3,
+		},
+		{
+			name: "add new product",
+			m:    &Meeting{},
+			args: args{
+				item:     OrderItem{Amount: 2, ItemName: "banana"},
+				customer: "asdf",
+			},
+			wantBananaAmount: 2,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.m.AddOrderItemForCustomer(tt.args.item, tt.args.customer)
+			_, order, found := tt.m.FindOrderByCustomer("asdf")
+			if !found {
+				t.Errorf("Order was not found for customer asdf")
+			}
+			_, bananaItem, found := order.FindItemByProductName("banana")
+			if !found {
+				t.Errorf("Banana item was not found in order of customer asdf")
+			}
+			if bananaItem.Amount != tt.wantBananaAmount {
+				t.Errorf("got bananaAmount %v, want %v", bananaItem.Amount, tt.wantBananaAmount)
+			}
 		})
 	}
 }

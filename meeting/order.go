@@ -35,6 +35,7 @@ func (order *Order) AddItem(item OrderItem) {
 	i, _, found := order.FindItemByProductName(item.ItemName)
 	if !found {
 		order.Items = append(order.Items, item)
+		return
 	}
 	order.Items[i].Amount += item.Amount
 }

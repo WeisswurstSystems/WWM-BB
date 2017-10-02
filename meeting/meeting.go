@@ -64,6 +64,7 @@ func (m *Meeting) AddOrderItemForCustomer(item OrderItem, customer CustomerMail)
 	if !found {
 		order.AddItem(item)
 		m.Orders = append(m.Orders, order)
+		return
 	}
 	m.Orders[i].AddItem(item)
 }
