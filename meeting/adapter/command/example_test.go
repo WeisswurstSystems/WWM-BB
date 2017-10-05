@@ -3,6 +3,7 @@ package command
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/closemeeting"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/createmeeting"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/putproduct"

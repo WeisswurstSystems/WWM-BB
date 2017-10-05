@@ -33,7 +33,7 @@ func (i Interactor) Authenticate(l user.Login) (user.User, error) {
 	if err != nil {
 		return user.User{}, err
 	}
-	if !authenticated(u, l) {
+	if l != u.Login {
 		return user.User{}, ErrNotAuthenticated
 	}
 
@@ -41,9 +41,4 @@ func (i Interactor) Authenticate(l user.Login) (user.User, error) {
 		return user.User{}, ErrNotFullyRegistered
 	}
 	return u, nil
-}
-
-// authenticated checks the user against the login.
-func authenticated(user user.User, l user.Login) bool {
-	return user.RegistrationID == "" && l == user.Login
 }
