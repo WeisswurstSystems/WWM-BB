@@ -3,6 +3,7 @@ package mail
 import (
 	"bytes"
 	"text/template"
+	"github.com/WeisswurstSystems/WWM-BB/constants"
 )
 
 type registrationData struct {
@@ -39,7 +40,7 @@ func NewRegistrationMail(registrationId string, usermail string) (mail Mail) {
 	}
 
 	smtpData := SmtpTemplateData{
-		BodyButtonLink: "http://wwm-bb.herokuapp.com/users/register/" + registrationId,
+		BodyButtonLink: constants.BASEURL_ACTIVATE_ACCOUNT + registrationId,
 		BodyButtonText: "Aktivieren",
 		Subject: registrationTopic,
 		BodyShortText: "Um deine Registrierung zu bestätigen, musst du nur noch eine Sache erledigen.",
