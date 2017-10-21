@@ -14,17 +14,3 @@ meetings/             [get -> meetings in Kurzform lesen, post -> Neues Meeting 
       |- invite/      [post mit user-id Liste -> Einladung versenden]
       |- notify/      [post mit message -> Update-Informationen an alle teilnehmenden Nutzer]
 ```
-
-# Umgebungsvariablen
-
-| Variablenname | Verwendung | Beispiel |
-| --- | --- | --- |
-| `mail.port` | Port des zu verwendenden Mail-Servers | 587 |
-| `mail.smtpServer` | Pfad des zu verwendenen Mail-Servers | smtp.gmail.com |
-| `mail.username` | Nutzername des zu verwendenen E-Mail Kontos | fabian.wilms@gmail.com |
-| `mail.password` | Passwort des zu verwendenen Mail-Kontos | **** |
-||||
-| `db.url` | Pfad zu Mongo-DB Server | something.mlab.com:12345/some-db |
-| `db.name` | Name der zu verwendenden Datenbank auf dem Server | some-db |
-| `db.username` | Nutzername des DB-Users | hans |
-| `db.password` | Password des Users | **** |
