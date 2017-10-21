@@ -32,7 +32,7 @@ func (i Interactor) SetBuyer(req Request) error {
 		return err
 	}
 
-	if !u.HasMail(m.Creator, m.Buyer) {
+	if !u.HasMail(m.Creator) {
 		return meeting.ErrNotAllowed
 	}
 
