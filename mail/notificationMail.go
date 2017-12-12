@@ -2,6 +2,7 @@ package mail
 
 import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
+	"github.com/WeisswurstSystems/WWM-BB/constants"
 )
 
 func init() {
@@ -18,7 +19,7 @@ func NewNotificiationMail(
 	meeting meeting.Meeting) (mail Mail) {
 
 	smtpData := SmtpTemplateData{
-		BodyButtonLink: "https://weisswurstsystems.github.io/WWM-ITM/" + string(meeting.ID),
+		BodyButtonLink: constants.BASEURL_GOTO_MEETING + string(meeting.ID),
 		BodyButtonText: "Gehe zu Meeting",
 		Subject:       notificationTopic,
 		BodyShortText: notificationShortMessage,

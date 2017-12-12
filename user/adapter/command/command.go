@@ -9,6 +9,7 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/register"
 	"github.com/WeisswurstSystems/WWM-BB/user/usecase/setUpPayPal"
 	"github.com/WeisswurstSystems/WWM-BB/wwm"
+	"github.com/WeisswurstSystems/WWM-BB/constants"
 )
 
 // Interactor describes the group of methods needed for this command handler.
@@ -56,7 +57,7 @@ func (ch *Handler) Activate(w http.ResponseWriter, req *http.Request) error {
 	if err != nil {
 		return err
 	}
-	http.Redirect(w, req, "http://www.google.com", 301)
+	http.Redirect(w, req, constants.URL_ACTIVATE_ACCOUNT_REDIRECT, 301)
 	return nil
 }
 
