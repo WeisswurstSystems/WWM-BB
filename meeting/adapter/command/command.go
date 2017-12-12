@@ -13,8 +13,8 @@ import (
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/invite"
 	"github.com/gorilla/mux"
 	"github.com/WeisswurstSystems/WWM-BB/meeting"
-	"errors"
 	"github.com/WeisswurstSystems/WWM-BB/meeting/usecase/notify"
+	"log"
 )
 
 type Interactor interface {
@@ -36,6 +36,8 @@ type CommandHandler struct {
 func (ch *CommandHandler) CloseMeeting(w http.ResponseWriter, req *http.Request) error {
 	var e closemeeting.Request
 	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
+	e.MeetingID = getIDFromRequest(req)
+
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
 		return err
@@ -57,6 +59,8 @@ func (ch *CommandHandler) CreateMeeting(w http.ResponseWriter, req *http.Request
 func (ch *CommandHandler) PutProduct(w http.ResponseWriter, req *http.Request) error {
 	var e putproduct.Request
 	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
+	e.MeetingID = getIDFromRequest(req)
+
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
 		return err
@@ -67,6 +71,8 @@ func (ch *CommandHandler) PutProduct(w http.ResponseWriter, req *http.Request) e
 func (ch *CommandHandler) RemoveProduct(w http.ResponseWriter, req *http.Request) error {
 	var e removeproduct.Request
 	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
+	e.MeetingID = getIDFromRequest(req)
+
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
 		return err
@@ -77,6 +83,8 @@ func (ch *CommandHandler) RemoveProduct(w http.ResponseWriter, req *http.Request
 func (ch *CommandHandler) SetBuyer(w http.ResponseWriter, req *http.Request) error {
 	var e setbuyer.Request
 	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
+	e.MeetingID = getIDFromRequest(req)
+
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
 		return err
@@ -87,6 +95,8 @@ func (ch *CommandHandler) SetBuyer(w http.ResponseWriter, req *http.Request) err
 func (ch *CommandHandler) SetPlace(w http.ResponseWriter, req *http.Request) error {
 	var e setplace.Request
 	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
+	e.MeetingID = getIDFromRequest(req)
+
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
 		return err
@@ -96,13 +106,8 @@ func (ch *CommandHandler) SetPlace(w http.ResponseWriter, req *http.Request) err
 
 func (ch *CommandHandler) ToggleOrderPayed(w http.ResponseWriter, req *http.Request) error {
 	var e toggleorderpayed.Request
-	e.Login.Mail, e.Login.Password, _  = req.BasicAuth()
-
-	id, ok := mux.Vars(req)["meetingId"]
-	if !ok {
-		return errors.New("meeting id url parameter missing")
-	}
-	e.MeetingID = meeting.MeetingID(id)
+	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
+	e.MeetingID = getIDFromRequest(req)
 
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
@@ -113,14 +118,9 @@ func (ch *CommandHandler) ToggleOrderPayed(w http.ResponseWriter, req *http.Requ
 
 func (ch *CommandHandler) Invite(w http.ResponseWriter, req *http.Request) error {
 	var e invite.Request
-
-	id, ok := mux.Vars(req)["meetingId"]
-	if !ok {
-		return errors.New("meeting id url parameter missing")
-	}
+	e.MeetingID = getIDFromRequest(req)
 
 	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
-	e.MeetingID = meeting.MeetingID(id)
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
 		return err
@@ -130,17 +130,21 @@ func (ch *CommandHandler) Invite(w http.ResponseWriter, req *http.Request) error
 
 func (ch *CommandHandler) Notify(w http.ResponseWriter, req *http.Request) error {
 	var e notify.Request
-
-	id, ok := mux.Vars(req)["meetingId"]
-	if !ok {
-		return errors.New("meeting id url parameter missing")
-	}
-
 	e.Login.Mail, e.Login.Password, _ = req.BasicAuth()
-	e.MeetingID = meeting.MeetingID(id)
+	e.MeetingID = meeting.MeetingID(getIDFromRequest(req))
+
 	err := wwm.DecodeBody(req.Body, &e)
 	if err != nil {
 		return err
 	}
 	return ch.Interactor.Notify(e)
+}
+
+func getIDFromRequest(request *http.Request) meeting.MeetingID {
+	id, ok := mux.Vars(request)["meetingId"]
+	if !ok {
+		log.Fatal("Request had no meetingId in path!")
+	}
+
+	return meeting.MeetingID(id)
 }
