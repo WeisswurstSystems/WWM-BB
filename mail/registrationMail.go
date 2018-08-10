@@ -1,56 +1,35 @@
 package mail
 
 import (
-	"bytes"
 	"text/template"
-	"github.com/WeisswurstSystems/WWM-BB/constants"
+	"bytes"
 )
 
-type registrationData struct {
-	Usermail       string
+type registrationData struct{
+	Usermail string
+	RegistrationID string
 }
 
-const registrationTopic = "Deine Registrierung"
+const topic = "Deine Registrierung bei der Weisswurst-Verwaltung"
 
-const registrationMessageTemplate = `
+const messageTemplate = `
 Hallo {{.Usermail}}!
-<br><br>
-Vielen Dank für deine Registrierung.<br>
-Um Dein Konto zu aktivieren, klicke bitte auf den unten stehenden Button.
-<br><br>
+
+Vielen Dank für deine Registrierung.
+Um Dein Konto zu aktivieren, klicke bitte auf den folgenden Link:
+http://wwm-bb.herokuapp.com/users/register/{{.RegistrationID}}
+
 Viel Spaß beim bestellen!
 `
 
-var registrationTemplate = template.New("registration")
-
-func init() {
-	_, err := registrationTemplate.Parse(registrationMessageTemplate)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func NewRegistrationMail(registrationId string, usermail string) (mail Mail) {
-	data := registrationData{Usermail: usermail}
+func SendRegistrationMail(registrationId string, usermail string) {
+	data := registrationData{Usermail: usermail, RegistrationID: registrationId}
+	tmpl, err := template.New("test").Parse(messageTemplate)
+	if err != nil { panic(err) }
 
 	var message bytes.Buffer
-	err := registrationTemplate.Execute(&message, data)
-	if err != nil {
-		panic(err)
-	}
+	err = tmpl.Execute(&message, data)
+	if err != nil { panic(err) }
 
-	smtpData := SmtpTemplateData{
-		BodyButtonLink: constants.BASEURL_ACTIVATE_ACCOUNT + registrationId,
-		BodyButtonText: "Aktivieren",
-		Subject: registrationTopic,
-		BodyShortText: "Um deine Registrierung zu bestätigen, musst du nur noch eine Sache erledigen.",
-		Body: message.String(),
-	}
-
-	mail.Content, err = NewContent(smtpData)
-	if err != nil {
-		panic(err)
-	}
-	mail.Receivers = []string{usermail}
-	return mail
+	SendMail(topic, message.String(), []string{usermail})
 }
